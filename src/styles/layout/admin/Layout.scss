@@ -1,0 +1,32 @@
+@use "../../colors";
+
+.adminLayoutProvider {
+  width: 100%;
+  height: 100%;
+  min-height: 100dvh;
+  display: flex;
+
+  > :last-child {
+    background-color: colors.$gray-50;
+    width: 100%;
+    padding: 4rem 5rem;
+    padding-bottom: 0;
+    > * {
+      margin: 3rem 0;
+    }
+    > :first-child {
+      margin-top: 0;
+    }
+    > :last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.dark {
+  .adminLayoutProvider {
+    > :last-child {
+      background-color: #252527;
+    }
+  }
+}
