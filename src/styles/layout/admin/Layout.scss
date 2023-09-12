@@ -2,15 +2,16 @@
 
 .adminLayoutProvider {
   width: 100%;
-  height: 100%;
-  min-height: 100dvh;
+  height: 100dvh;
   display: flex;
+  overflow: hidden;
 
   > :last-child {
     background-color: colors.$gray-50;
     width: 100%;
     padding: 4rem 5rem;
     padding-bottom: 0;
+    overflow: auto;
     > * {
       margin: 3rem 0;
     }

@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { BsCart3, BsCreditCard2FrontFill, BsPeopleFill } from "react-icons/bs";
 import { TbReportAnalytics } from "react-icons/tb";
 import { PiTruckDuotone } from "react-icons/pi";
+import { RxExit } from "react-icons/rx";
 
 interface MenuItem {
   icon: React.ReactNode; // Assuming BiSolidDashboard returns React components
@@ -76,7 +77,7 @@ const Sidebar = () => {
     <div className="adminSidebar">
       <div className="adminSidebar__logo">
         <HiMiniShoppingBag />
-        <p>Vc</p>
+        <p>Vista</p>
       </div>
       <div className="adminSidebar__menu">
         {data.map((dat: MenuItem, i: number) => {
@@ -89,12 +90,20 @@ const Sidebar = () => {
                 {dat.icon}
                 <p>{dat.text}</p>
               </Link>
-              <div style={{ display: path === dat.link ? "flex" : "none" }} />
+              <div style={{ opacity: path === dat.link ? "1" : "0" }} />
             </div>
           );
         })}
       </div>
-      <div className="adminSidebar__in"></div>
+      <div className="adminSidebar__menu">
+        <div>
+          <div>
+            <RxExit />
+            <p>Logout</p>
+          </div>
+          <div style={{ display: "none" }} />
+        </div>
+      </div>
       <div onClick={toggleDarkMode}>
         <p>Dark Mode</p>
         <Switch

@@ -41,12 +41,14 @@
     width: 100%;
 
     > * {
+      cursor: pointer;
       //   height: 5rem;
       padding: 1rem 0;
       width: 100%;
       position: relative;
-
+      transition: 0.5s ease-in-out;
       margin: 1rem 0;
+
       > :first-child {
         padding-left: 5rem;
         display: flex;
@@ -59,6 +61,7 @@
         }
       }
       > :last-child {
+        transition: 0.5s ease-in-out;
         width: 0.5rem;
         height: 100%;
         background-color: colors.$primary-500;
@@ -69,15 +72,27 @@
         border-bottom-left-radius: 2rem;
       }
     }
+    > *:hover {
+      background-color: colors.$primary-100;
+      transition: 0.5s ease-in-out;
+    }
   }
 }
 
 .adminSidebar__menu_act {
   background-color: colors.$primary-100;
+  transition: 0.5s ease-in-out;
 }
 
 .dark {
   .adminSidebar__menu_act {
-    background-color: colors.$primary-800;
+    background-color: colors.$primary-700;
+    transition: 0.5s ease-in-out;
+  }
+  .adminSidebar__menu {
+    > *:hover {
+      background-color: colors.$primary-700;
+      transition: 0.5s ease-in-out;
+    }
   }
 }

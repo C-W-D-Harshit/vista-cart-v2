@@ -15,20 +15,57 @@ const Header = () => {
       title: "Dashboard",
       description: "Detailed information about your store",
     },
+    {
+      path: "/admin/orders",
+      title: "Orders",
+      description: "Manage and view orders placed by customers",
+    },
+    {
+      path: "/admin/products",
+      title: "Products",
+      description: "Add, edit, and manage your store's products",
+    },
+    {
+      path: "/admin/customers",
+      title: "Customers",
+      description: "Manage your customer base and their information",
+    },
+    {
+      path: "/admin/reports",
+      title: "Reports",
+      description: "View detailed reports and analytics",
+    },
+    {
+      path: "/admin/transactions",
+      title: "Transactions",
+      description: "View and manage financial transactions",
+    },
+    {
+      path: "/admin/shipment",
+      title: "Shipment",
+      description: "Track and manage shipments and deliveries",
+    },
   ];
+
+  const foundItems = data.filter((item) => path === item.path);
+
   return (
     <div className="adminHeader">
-      {data.map((item) => {
-        if (path === item.path) {
-          return (
-            <div key={item.path}>
-              <p>{item.title}</p>
-              <p>{item.description}</p>
-            </div>
-          );
-        }
-        return null; // or any other default content if no match is found
-      })}
+      {foundItems.length > 0 ? (
+        foundItems.map((item) => (
+          // Render content when a match is found
+          <div key={item.path}>
+            <p>{item.title}</p>
+            <p>{item.description}</p>
+          </div>
+        ))
+      ) : (
+        // Render "Not Found" message only once
+        <div>
+          <p>Not Found</p>
+          <p>Go Back To Main Menu</p>
+        </div>
+      )}
       <div>
         <div className="adminHeader__search">
           <BsSearch />
