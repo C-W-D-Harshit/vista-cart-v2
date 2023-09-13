@@ -12,6 +12,8 @@ import { BsCart3, BsCreditCard2FrontFill, BsPeopleFill } from "react-icons/bs";
 import { TbReportAnalytics } from "react-icons/tb";
 import { PiTruckDuotone } from "react-icons/pi";
 import { RxExit } from "react-icons/rx";
+import { signOut } from "next-auth/react";
+import toast from "react-hot-toast";
 
 interface MenuItem {
   icon: React.ReactNode; // Assuming BiSolidDashboard returns React components
@@ -73,6 +75,10 @@ const Sidebar = () => {
       link: "/admin/shipment",
     },
   ];
+  const logout = async () => {
+    signOut();
+    toast.success("Logged Out!");
+  };
   return (
     <div className="adminSidebar">
       <div className="adminSidebar__logo">
@@ -96,7 +102,7 @@ const Sidebar = () => {
         })}
       </div>
       <div className="adminSidebar__menu">
-        <div>
+        <div onClick={logout}>
           <div>
             <RxExit />
             <p>Logout</p>
