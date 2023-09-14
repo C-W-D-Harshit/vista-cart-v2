@@ -1,0 +1,33 @@
+@use "../../colors";
+
+.userLayoutProvider {
+  width: 100%;
+  height: 100dvh;
+  display: flex;
+  overflow: hidden;
+
+  > :last-child {
+    // background-color: colors.$gray-50;
+    width: 100%;
+    padding: 4rem 5rem;
+    padding-bottom: 0;
+    overflow: auto;
+    > * {
+      margin: 3rem 0;
+    }
+    > :first-child {
+      margin-top: 0;
+    }
+    > :last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.dark {
+  .userLayoutProvider {
+    > :last-child {
+      // background-color: #252527;
+    }
+  }
+}

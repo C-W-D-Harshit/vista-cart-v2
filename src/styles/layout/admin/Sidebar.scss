@@ -29,6 +29,7 @@
   }
   .adminSidebar__logo {
     display: flex;
+    user-select: none;
     align-items: center;
     font-size: 3.5rem;
     font-weight: 700;

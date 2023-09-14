@@ -12,7 +12,7 @@ import Link from "next/link";
 
 const Header = () => {
   const { data: session } = useSession();
-  console.log(session);
+  // console.log(session);
   const path = usePathname();
   const data = [
     {

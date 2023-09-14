@@ -1,6 +1,6 @@
 "use client";
 
-import "@/styles/layout/user/Layout.scss";
+import "@/styles/layout/user/layout.scss";
 import Header from "@/components/layout/user/Header";
 import React from "react";
 import Sidebar from "@/components/layout/user/Sidebar";
