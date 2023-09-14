@@ -19,6 +19,22 @@ const userSchema = new Schema(
       required: true,
       enum: ["github", "google", "credentials"],
     },
+    role: {
+      type: String,
+      required: true,
+      enum: ["admin", "user", "seller"],
+      default: "user",
+    },
+    active: {
+      type: Boolean,
+      default: true,
+    },
+    status: {
+      type: String,
+      required: true,
+      enum: ["active", "blocked"],
+      default: "active",
+    },
   },
   {
     timestamps: true,

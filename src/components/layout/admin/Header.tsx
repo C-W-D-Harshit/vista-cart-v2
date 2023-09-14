@@ -6,8 +6,13 @@ import { usePathname } from "next/navigation";
 import { BiBell } from "react-icons/bi";
 import { AiOutlineDown } from "react-icons/ai";
 import { BsSearch } from "react-icons/bs";
+import { signOut, useSession } from "next-auth/react";
+import toast from "react-hot-toast";
+import Link from "next/link";
 
 const Header = () => {
+  const { data: session } = useSession();
+  console.log(session);
   const path = usePathname();
   const data = [
     {
@@ -49,6 +54,31 @@ const Header = () => {
 
   const foundItems = data.filter((item) => path === item.path);
 
+  const userName = session?.user?.name as string;
+
+  const userInitials = session?.user?.name ? session?.user?.name[0] : "S";
+
+  function extractFirstName(username: string): string | null {
+    // Define the separator character (e.g., underscore or space)
+    const separator = " "; // Change this to the appropriate separator
+
+    // Split the username into parts based on the separator
+    const parts = username.split(separator);
+
+    // Check if there is at least one part (the first name)
+    if (parts.length > 0) {
+      return parts[0]; // The first part is the first name
+    } else {
+      return null; // No first name found
+    }
+  }
+
+  const firstName = session?.user ? extractFirstName(userName) : "User";
+
+  const logout = async () => {
+    signOut();
+    toast.success("Logged Out!");
+  };
   return (
     <div className="adminHeader">
       {foundItems.length > 0 ? (
@@ -83,13 +113,13 @@ const Header = () => {
           <DropdownMenu.Trigger>
             <div className="adminHeader__user">
               <Avatar
-                src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?&w=64&h=64&dpr=2&q=70&crop=focalpoint&fp-x=0.5&fp-y=0.3&fp-z=1&fit=crop"
-                fallback="S"
+                src={session?.user?.image as string}
+                fallback={userInitials}
                 radius="full"
               />
               <div>
                 <div>
-                  <p>Harshit</p>
+                  <p>{firstName}</p>
                   <AiOutlineDown />
                 </div>
                 <p>Admin</p>
@@ -97,28 +127,13 @@ const Header = () => {
             </div>
           </DropdownMenu.Trigger>
           <DropdownMenu.Content>
-            <DropdownMenu.Item shortcut="⌘ E">Edit</DropdownMenu.Item>
-            <DropdownMenu.Item shortcut="⌘ D">Duplicate</DropdownMenu.Item>
+            <Link href={"/"}>
+              <DropdownMenu.Item>Store</DropdownMenu.Item>
+            </Link>
+            <DropdownMenu.Item>Account</DropdownMenu.Item>
             <DropdownMenu.Separator />
-            <DropdownMenu.Item shortcut="⌘ N">Archive</DropdownMenu.Item>
-
-            <DropdownMenu.Sub>
-              <DropdownMenu.SubTrigger>More</DropdownMenu.SubTrigger>
-              <DropdownMenu.SubContent>
-                <DropdownMenu.Item>Move to project…</DropdownMenu.Item>
-                <DropdownMenu.Item>Move to folder…</DropdownMenu.Item>
-
-                <DropdownMenu.Separator />
-                <DropdownMenu.Item>Advanced options…</DropdownMenu.Item>
-              </DropdownMenu.SubContent>
-            </DropdownMenu.Sub>
-
-            <DropdownMenu.Separator />
-            <DropdownMenu.Item>Share</DropdownMenu.Item>
-            <DropdownMenu.Item>Add to favorites</DropdownMenu.Item>
-            <DropdownMenu.Separator />
-            <DropdownMenu.Item shortcut="⌘ ⌫" color="red">
-              Delete
+            <DropdownMenu.Item color="red" onClick={logout}>
+              Logout
             </DropdownMenu.Item>
           </DropdownMenu.Content>
         </DropdownMenu.Root>

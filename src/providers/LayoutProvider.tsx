@@ -3,6 +3,7 @@
 import React from "react";
 import { usePathname } from "next/navigation";
 import AdminLayoutProvider from "./AdminLayoutProvider";
+import UserLayoutProvider from "./UserLayoutProvider";
 
 export default function LayoutProvider({
   children,
@@ -21,5 +22,5 @@ export default function LayoutProvider({
     return <>{children}</>;
   }
 
-  return <>{children}</>;
+  return <UserLayoutProvider>{children}</UserLayoutProvider>;
 }

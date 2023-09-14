@@ -1,19 +1,23 @@
-// export { default } from "next-auth/middleware";
-
-import { withAuth, NextRequestWithAuth } from "next-auth/middleware";
-import { NextRequest, NextResponse } from "next/server";
+import { withAuth } from "next-auth/middleware";
+import { NextResponse } from "next/server";
 
 export default withAuth(
-  function middleware(request: NextRequestWithAuth) {
-    if (request.nextUrl.pathname.startsWith("/admin")) {
-      return NextResponse.redirect(new URL("/denied", request.url));
+  // `withAuth` augments your `Request` with the user's token.
+  function middleware(req) {
+    if (
+      req.nextUrl.pathname === "/admin" &&
+      req.nextauth.token?.role !== "admin"
+    ) {
+      return new NextResponse("You are not authorized!");
     }
   },
   {
     callbacks: {
-      authorized: ({ token }) => !!token,
+      authorized: (params) => {
+        let { token } = params;
+        return !!token;
+      },
     },
-    // df
   }
 );
 

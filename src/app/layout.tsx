@@ -4,6 +4,7 @@ import "@/styles/globals.scss";
 import type { Metadata } from "next";
 import { Toaster } from "react-hot-toast";
 import NextTopLoader from "nextjs-toploader";
+import AuthSessionProvider from "@/providers/AuthSessionProvider";
 
 export const metadata: Metadata = {
   title: "Vista Cart",
@@ -20,9 +21,11 @@ export default function RootLayout({
       <body>
         <Toaster position="top-center" reverseOrder={false} />
         <NextTopLoader showSpinner={false} color="#5c59e8" />
-        <NextThemeProvider>
-          <LayoutProvider>{children}</LayoutProvider>
-        </NextThemeProvider>
+        <AuthSessionProvider>
+          <NextThemeProvider>
+            <LayoutProvider>{children}</LayoutProvider>
+          </NextThemeProvider>
+        </AuthSessionProvider>
       </body>
     </html>
   );

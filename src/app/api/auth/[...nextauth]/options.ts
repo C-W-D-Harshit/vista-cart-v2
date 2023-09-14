@@ -24,8 +24,6 @@ export const authOptions = {
         // Connect to the MongoDB database
         await connectMongoDB();
 
-        console.log(email);
-
         // Find the user by email in your database
         const user = await User.findOne({ email });
 
@@ -79,10 +77,59 @@ export const authOptions = {
           email: user.email,
           password: "randomString",
           provider,
+          role: "user",
         });
       }
 
       return user;
+    },
+    async jwt({
+      token,
+      user,
+      session,
+    }: {
+      token: any;
+      user: any;
+      session: any;
+    }) {
+      if (user) {
+        // first connect db
+        await connectMongoDB();
+
+        // find user through email
+        const email = user.email;
+        const user_ = await User.findOne({ email });
+
+        // assining role
+        // token.role = user_.role;
+        return {
+          ...token,
+          id: user_._id,
+          role: user_.role,
+        };
+      }
+
+      return token;
+    },
+    async session({
+      token,
+      user,
+      session,
+    }: {
+      token: any;
+      user: any;
+      session: any;
+    }) {
+      // console.log("session callback", { session, token, user });
+
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.id,
+          role: token.role,
+        },
+      };
     },
   },
   // callbacks: {
