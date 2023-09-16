@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar, DropdownMenu } from "@radix-ui/themes";
+import { Avatar, DropdownMenu, Tooltip } from "@radix-ui/themes";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -9,6 +9,7 @@ import { BiCart, BiHeart } from "react-icons/bi";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import "@/styles/layout/user/header.scss";
+import Image from "next/image";
 
 const Header = () => {
   const { data: session }: { data: any } = useSession();
@@ -37,6 +38,8 @@ const Header = () => {
   }
 
   const firstName = session?.user ? extractFirstName(userName) : "User";
+
+  const userImage = session?.user?.image || "/user.avif";
   return (
     <div className="header">
       <div className="header__search">
@@ -55,14 +58,22 @@ const Header = () => {
         <div className="header__user">
           <DropdownMenu.Root>
             <DropdownMenu.Trigger>
-              <Avatar
-                src={session?.user?.image as string}
+              {/* <Avatar
+                src={userImage}
                 // src="/user.avif"
                 fallback={userInitials}
                 // fallback="b"
                 radius="full"
                 size={"3"}
-              />
+              /> */}
+              <div className="header_user_img">
+                <Image
+                  alt={userInitials}
+                  src={userImage}
+                  width={50}
+                  height={50}
+                />
+              </div>
             </DropdownMenu.Trigger>
             <DropdownMenu.Content>
               <DropdownMenu.Item>
@@ -84,7 +95,14 @@ const Header = () => {
         <div className="header__user">
           <DropdownMenu.Root>
             <DropdownMenu.Trigger>
-              <Avatar fallback="s" src="/user.avif" radius="full" size={"3"} />
+              <div className="header_user_img">
+                <Image
+                  alt={userInitials}
+                  src={userImage}
+                  width={50}
+                  height={50}
+                />
+              </div>
             </DropdownMenu.Trigger>
             <DropdownMenu.Content>
               <Link href="/auth/login">

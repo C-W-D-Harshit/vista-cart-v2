@@ -9,6 +9,7 @@ import { BsSearch } from "react-icons/bs";
 import { signOut, useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import Link from "next/link";
+import Image from "next/image";
 
 const Header = () => {
   const { data: session } = useSession();
@@ -75,6 +76,8 @@ const Header = () => {
 
   const firstName = session?.user ? extractFirstName(userName) : "User";
 
+  const userImage = session?.user?.image || "/user.avif";
+
   const logout = async () => {
     signOut();
     toast.success("Logged Out!");
@@ -112,11 +115,19 @@ const Header = () => {
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
             <div className="adminHeader__user">
-              <Avatar
+              {/* <Avatar
                 src={session?.user?.image as string}
                 fallback={userInitials}
                 radius="full"
-              />
+              /> */}
+              <div className="header_user_img">
+                <Image
+                  alt={userInitials}
+                  src={userImage}
+                  width={50}
+                  height={50}
+                />
+              </div>
               <div>
                 <div>
                   <p>{firstName}</p>

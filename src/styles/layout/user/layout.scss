@@ -31,3 +31,11 @@
     }
   }
 }
+
+@media (max-width: 768px) {
+  .userLayoutProvider {
+    > :first-child {
+      display: none;
+    }
+  }
+}

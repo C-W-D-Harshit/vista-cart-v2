@@ -19,15 +19,23 @@ import { FieldValue, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Loading from "../../loading";
+import axios from "axios";
 
-const signUpSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8, "Password should have atleast 8 characters"),
-});
+const signUpSchema = z
+  .object({
+    password: z.string().min(8, "Password should have atleast 8 characters"),
+    resetToken: z.string(),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords must match",
+    path: ["confirmPassword"],
+  });
 
 type signUpSchema = z.infer<typeof signUpSchema>;
 
 const Page = () => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -37,30 +45,20 @@ const Page = () => {
     resolver: zodResolver(signUpSchema),
   });
 
-  const onSubmit = async (data: any) => {
-    const { email, password } = data;
-
+  const onSubmit = async (formData: any) => {
     // Perform client-side validation (e.g., check for empty fields)
-    toast.loading("Logging you in...", { duration: 1000 });
+    toast.loading("Resetting password...", { duration: 2000 });
 
     // Trigger the sign-in process
-    const result: any = await signIn("credentials", {
-      redirect: false, // Set to false to handle redirect manually
-      email,
-      password,
-    });
-
-    // Check if sign-in was successful
-    if (result.error) {
-      // Handle sign-in error (display error message, etc.)
-      console.log("Sign-in error:", result);
-      toast.error("Login Failed!");
-    } else {
-      // Sign-in was successful, handle redirect or other actions
-      console.log("Sign-in successful:", result);
-      toast.success("Logged In!");
-      router.push("/");
-    }
+    try {
+      const { data } = await axios.post("/api/user/reset-password", formData);
+      if (data.success === false) {
+        toast.error(data.message);
+      }
+      toast.success(data.message);
+      reset();
+      router.push("/auth/login");
+    } catch (error) {}
   };
   const defaultOptions = {
     loop: true,
@@ -71,17 +69,7 @@ const Page = () => {
     },
     setScale: 1.5,
   };
-  const router = useRouter();
-  const login = (provider: string) => {
-    try {
-      signIn(provider, { callbackUrl: "http://localhost:3000/" });
-      toast.success("Logged In!");
-    } catch (error: any) {
-      // Handle errors, possibly by displaying an error message using toast.error() or other means
-      console.error("Login failed:", error);
-      toast.error(`Error: ${error.message}`);
-    }
-  };
+
   return (
     <div className="auth">
       <div>
@@ -102,55 +90,48 @@ const Page = () => {
           </Link>
           <div className="auth_form">
             <div className="auth_form_head">
-              <p>Welcome back!</p>
-              <p>Please enter your details</p>
+              <p>Now you can reset password!</p>
+              <p>Please enter your email</p>
             </div>
             <div className="auth_form_">
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="group">
-                  <input type="email" {...register("email")} id="k" />
+                  <input type="text" {...register("resetToken")} id="k" />
                   <span className="bar"></span>
-                  <label>Email</label>
+                  <label style={{ color: errors.resetToken ? "red" : "" }}>
+                    {errors.resetToken
+                      ? errors.resetToken.message
+                      : "Reset Token"}
+                  </label>
                 </div>
-                <div className="group" style={{ marginBottom: "2rem" }}>
+                <div className="group">
                   <input type="password" {...register("password")} id="k" />
                   <span className="bar"></span>
-                  <label>Password</label>
+                  <label style={{ color: errors.password ? "red" : "" }}>
+                    {errors.password ? errors.password.message : "Password"}
+                  </label>
                 </div>
-                <div className="auth_form_reme">
-                  <div>
-                    <Checkbox mr="1" defaultChecked size={"1"} />
-                    <p>Remember Me</p>
-                  </div>
-                  <Link href="/auth/forgot-password">
-                    <p>Forgot Password?</p>
-                  </Link>
+                <div className="group" style={{ marginBottom: "2rem" }}>
+                  <input
+                    type="password"
+                    {...register("confirmPassword")}
+                    id="k"
+                  />
+                  <span className="bar"></span>
+                  <label style={{ color: errors.confirmPassword ? "red" : "" }}>
+                    {errors.confirmPassword
+                      ? errors.confirmPassword.message
+                      : "Confirm Password"}
+                  </label>
                 </div>
+
                 <button
                   type="submit"
                   disabled={isSubmitting}
                   className="bc"
                   style={{ marginBottom: "1.5rem" }}
                 >
-                  Log In
-                </button>
-                <button
-                  onClick={() => login("google")}
-                  className="oath"
-                  style={{ marginBottom: "1.5rem" }}
-                  type="button"
-                >
-                  <FcGoogle />
-                  Log in with Google
-                </button>
-                <button
-                  onClick={() => login("github")}
-                  className="oath"
-                  style={{ marginBottom: "1.5rem" }}
-                  type="button"
-                >
-                  <AiFillGithub />
-                  Log in with Github
+                  Submit
                 </button>
               </form>
             </div>

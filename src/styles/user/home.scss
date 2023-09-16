@@ -51,6 +51,7 @@
   margin: 1rem 0;
   > * {
     border-radius: 1rem;
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -193,6 +194,11 @@
     }
   }
 }
+// .dark {
+//   .cards > * {
+//     background-color: colors.$l-dark;
+//   }
+// }
 
 /* Screen larger than 600px? 2 column */
 @media (max-width: 768px) {

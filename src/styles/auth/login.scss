@@ -1,0 +1,252 @@
+@use "../colors";
+
+.auth {
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  overflow-y: auto;
+  display: flex;
+  align-items: center;
+  background-color: colors.$gray-50;
+  padding: 2rem;
+  > :first-child {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  > :last-child {
+    width: 80rem;
+    height: 100%;
+    background-color: #fff;
+    border-radius: 2rem;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    display: flex;
+    // flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    > :first-child {
+      width: 100%;
+      height: 100%;
+      padding: 4rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      > :first-child {
+        font-size: 5rem;
+      }
+      > :last-child {
+        span {
+          font-weight: 600;
+        }
+      }
+    }
+  }
+}
+
+.auth_form {
+  height: 80%;
+  width: 100%;
+  display: flex;
+  //   justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+
+  .auth_form_head {
+    margin-bottom: 7rem;
+    > :first-child {
+      font-size: 3.5rem;
+      font-weight: 600;
+    }
+  }
+
+  > :first-child {
+    > p {
+      text-align: center;
+    }
+  }
+
+  button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    border-radius: 2.5rem;
+    border: none;
+    background-color: #18181a;
+    font-weight: 600;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+
+  .oath {
+    > :first-child {
+      margin-right: 1rem;
+    }
+    background-color: colors.$gray-50;
+    color: #18181a;
+  }
+}
+
+.dark {
+  .bc {
+    background-color: colors.$primary-500 !important;
+  }
+}
+
+.auth_form_reme {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5rem;
+  > :first-child {
+    display: flex;
+    align-items: center;
+  }
+}
+
+// css input
+.group {
+  position: relative;
+  margin-bottom: 30px;
+}
+
+.group:last-child {
+  margin-bottom: 1rem;
+}
+#k {
+  font-size: 18px;
+  padding: 10px 10px 10px 5px;
+  display: block;
+  width: 300px;
+  border: none;
+  border-bottom: 1px solid #757575;
+}
+#k:focus {
+  outline: none;
+}
+
+/* LABEL ======================================= */
+label {
+  color: #999;
+  font-size: 18px;
+  font-weight: normal;
+  position: absolute;
+  pointer-events: none;
+  left: 5px;
+  top: 10px;
+  transition: 0.2s ease all;
+  -moz-transition: 0.2s ease all;
+  -webkit-transition: 0.2s ease all;
+}
+
+.dark {
+  .auth {
+    background-color: #252527;
+    > :last-child {
+      background-color: #18181a;
+    }
+  }
+}
+
+/* active state */
+#k:focus ~ label,
+#k:valid ~ label {
+  top: -20px;
+  font-size: 14px;
+  color: #5264ae;
+}
+
+/* BOTTOM BARS ================================= */
+.bar {
+  position: relative;
+  display: block;
+  width: 300px;
+}
+.bar:before,
+.bar:after {
+  content: "";
+  height: 2px;
+  width: 0;
+  bottom: 1px;
+  position: absolute;
+  background: #5264ae;
+  transition: 0.2s ease all;
+  -moz-transition: 0.2s ease all;
+  -webkit-transition: 0.2s ease all;
+}
+.bar:before {
+  left: 50%;
+}
+.bar:after {
+  right: 50%;
+}
+
+/* active state */
+input:focus ~ .bar:before,
+input:focus ~ .bar:after {
+  width: 50%;
+}
+
+/* HIGHLIGHTER ================================== */
+.highlight {
+  position: absolute;
+  height: 60%;
+  width: 100px;
+  top: 25%;
+  left: 0;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* active state */
+input:focus ~ .highlight {
+  -webkit-animation: inputHighlighter 0.3s ease;
+  -moz-animation: inputHighlighter 0.3s ease;
+  animation: inputHighlighter 0.3s ease;
+}
+
+/* ANIMATIONS ================ */
+@-webkit-keyframes inputHighlighter {
+  from {
+    background: #5264ae;
+  }
+  to {
+    width: 0;
+    background: transparent;
+  }
+}
+@-moz-keyframes inputHighlighter {
+  from {
+    background: #5264ae;
+  }
+  to {
+    width: 0;
+    background: transparent;
+  }
+}
+@keyframes inputHighlighter {
+  from {
+    background: #5264ae;
+  }
+  to {
+    width: 0;
+    background: transparent;
+  }
+}
+
+@media (max-width: 768px) {
+  .auth {
+    justify-content: center;
+    height: 100%;
+    min-height: none;
+    > :first-child {
+      display: none;
+    }
+  }
+}
