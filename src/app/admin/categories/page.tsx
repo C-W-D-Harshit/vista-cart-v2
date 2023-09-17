@@ -1,5 +1,5 @@
 "use client";
-import "@/styles/admin/products.scss";
+// import "@/styles/admin/products.scss";
 import axios from "axios";
 import Image from "next/image";
 import { useState } from "react";

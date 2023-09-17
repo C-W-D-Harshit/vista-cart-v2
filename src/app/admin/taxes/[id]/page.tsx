@@ -7,7 +7,7 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import toast from "react-hot-toast";
 import { AiOutlineClose, AiOutlinePlus, AiOutlineRight } from "react-icons/ai";
 import useSWR from "swr";
-import "@/styles/admin/products.scss";
+// import "@/styles/admin/products.scss";
 
 const ID = ({ params: { id } }: { params: { id: string } }) => {
   const router = useRouter();

@@ -1,7 +1,7 @@
 "use client";
 
 import { ChangeEvent, useRef, useState } from "react";
-import "@/styles/admin/products.scss";
+// import "@/styles/admin/products.scss";
 import axios from "axios";
 import useSWR from "swr";
 import Image from "next/image";

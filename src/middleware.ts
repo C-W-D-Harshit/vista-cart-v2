@@ -5,7 +5,7 @@ export default withAuth(
   // `withAuth` augments your `Request` with the user's token.
   function middleware(req) {
     if (
-      req.nextUrl.pathname === "/admin" &&
+      req.nextUrl.pathname.startsWith("/admin") &&
       req.nextauth.token?.role !== "admin"
     ) {
       return new NextResponse("You are not authorized!");
@@ -21,4 +21,6 @@ export default withAuth(
   }
 );
 
-export const config = { matcher: ["/admin/:anything*"] };
+export const config = {
+  matcher: ["/admin/:anything*"],
+};
