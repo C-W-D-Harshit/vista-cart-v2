@@ -1,11 +1,9 @@
 import connectMongoDB from "@/libs/mongo/dbConnect";
 import SessionChecker from "@/libs/session/SessionChecker";
 import Product from "@/models/product";
-import { Error } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
-import catchAsyncErrors from "@/utils/catchAsyncErrors";
 
-export async function GET(
+export async function DELETE(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
@@ -16,16 +14,15 @@ export async function GET(
     return isAdminAuthorized;
   }
 
-  // get id
-  const { id } = params;
-
   // connect DB
   await connectMongoDB();
 
-  // find product in DB
+  // create necessary fields
   let product: any = {};
+  const { id } = params;
+
   try {
-    product = await Product.findById(id);
+    product = await Product.findByIdAndDelete(id);
   } catch (error: any) {
     return NextResponse.json({
       success: false,
@@ -35,6 +32,6 @@ export async function GET(
 
   return NextResponse.json({
     success: true,
-    product,
+    message: "Product deleted successfully!",
   });
 }

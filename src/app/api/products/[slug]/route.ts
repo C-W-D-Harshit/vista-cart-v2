@@ -15,6 +15,7 @@ export async function GET(
   // find product in DB
   const product = await Product.find({
     slug,
+    status: "published",
   });
 
   if (!product) {

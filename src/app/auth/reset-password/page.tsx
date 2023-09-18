@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
 
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Router } from "next/router";
 import React, { Suspense } from "react";
@@ -44,6 +44,11 @@ const Page = () => {
   } = useForm<signUpSchema>({
     resolver: zodResolver(signUpSchema),
   });
+  const { data: session, status } = useSession();
+  if (session) {
+    router.push("/");
+    return;
+  }
 
   const onSubmit = async (formData: any) => {
     // Perform client-side validation (e.g., check for empty fields)

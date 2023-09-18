@@ -4,15 +4,6 @@ import ApiFeatures from "@/utils/apiFeatures";
 import Product from "@/models/product";
 import QueryMaker from "@/libs/query/QueryMaker";
 
-export async function POST(req: NextRequest) {
-  // first take body
-  const body = await req.json();
-  return NextResponse.json(
-    { message: "Registered Successfully!" },
-    { status: 201 }
-  );
-}
-
 export async function GET(req: NextRequest) {
   // first connect DB
   await connectMongoDB();
@@ -23,9 +14,8 @@ export async function GET(req: NextRequest) {
   // then do the rest simple work
   const features = new ApiFeatures(
     Product.find({
-      active: true,
-      verified: true,
-    }).select(" -verified -active -featuredExpiry"),
+      status: "published",
+    }).select(" -featuredExpiry"),
     query
   )
     .filter()
@@ -34,9 +24,9 @@ export async function GET(req: NextRequest) {
     .search();
   const rpp = process.env.RPP as any;
   const products = await features.query;
-  const totalProduct = await Product.find();
-  const totalProducts = totalProduct.length;
-  const totalPages = Math.ceil(totalProducts / (rpp || 8));
+  const totalProducts: number = products.length;
+  const totalPages =
+    totalProducts === 0 ? 0 : Math.ceil(totalProducts / (rpp || 8));
   const numOfResults = products.length;
   // console.log(products);
   return NextResponse.json(

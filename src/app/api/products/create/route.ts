@@ -1,14 +1,9 @@
 import connectMongoDB from "@/libs/mongo/dbConnect";
 import SessionChecker from "@/libs/session/SessionChecker";
 import Product from "@/models/product";
-import { Error } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
-import catchAsyncErrors from "@/utils/catchAsyncErrors";
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function POST(req: NextRequest) {
   // check for admin
   const isAdminAuthorized = await SessionChecker({ role: "admin" });
 
@@ -16,23 +11,21 @@ export async function GET(
     return isAdminAuthorized;
   }
 
-  // get id
-  const { id } = params;
-
   // connect DB
   await connectMongoDB();
 
-  // find product in DB
-  let product: any = {};
+  // create product
+  let product = {};
   try {
-    product = await Product.findById(id);
+    // create body
+    const body = await req.json();
+    product = await Product.create(body);
   } catch (error: any) {
     return NextResponse.json({
       success: false,
       message: error.message,
     });
   }
-
   return NextResponse.json({
     success: true,
     product,

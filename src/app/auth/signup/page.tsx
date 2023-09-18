@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
 
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Router } from "next/router";
 import React from "react";
@@ -39,6 +39,7 @@ import { signUpSchema } from "@/zod/schema";
 // type signUpSchema = z.infer<typeof signUpSchema>;
 
 const Page = () => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -47,6 +48,11 @@ const Page = () => {
   } = useForm<signUpSchema>({
     resolver: zodResolver(signUpSchema),
   });
+  const { data: session, status } = useSession();
+  if (session) {
+    router.push("/");
+    return;
+  }
 
   const onSubmit = async (formData_: any) => {
     const { name, email, password } = formData_;
@@ -76,7 +82,6 @@ const Page = () => {
     },
     setScale: 1.5,
   };
-  const router = useRouter();
   const login = async (provider: string) => {
     try {
       const lgin = await signIn(provider, {

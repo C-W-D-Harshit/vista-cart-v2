@@ -1,11 +1,9 @@
 import connectMongoDB from "@/libs/mongo/dbConnect";
 import SessionChecker from "@/libs/session/SessionChecker";
 import Product from "@/models/product";
-import { Error } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
-import catchAsyncErrors from "@/utils/catchAsyncErrors";
 
-export async function GET(
+export async function PATCH(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
@@ -16,16 +14,20 @@ export async function GET(
     return isAdminAuthorized;
   }
 
-  // get id
-  const { id } = params;
-
   // connect DB
   await connectMongoDB();
 
-  // find product in DB
+  // create necessary fields
   let product: any = {};
+  const { id } = params;
+
   try {
-    product = await Product.findById(id);
+    const body = await req.json();
+    product = await Product.findByIdAndUpdate(id, body, {
+      new: true,
+      runValidators: true,
+    });
+    product.save();
   } catch (error: any) {
     return NextResponse.json({
       success: false,
@@ -33,6 +35,12 @@ export async function GET(
     });
   }
 
+  if (!product) {
+    return NextResponse.json({
+      success: false,
+      message: "Product not found",
+    });
+  }
   return NextResponse.json({
     success: true,
     product,
