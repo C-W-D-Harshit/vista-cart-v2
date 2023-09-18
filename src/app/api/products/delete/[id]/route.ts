@@ -30,6 +30,13 @@ export async function DELETE(
     });
   }
 
+  if (!product) {
+    return NextResponse.json({
+      success: false,
+      message: "Product not found!",
+    });
+  }
+
   return NextResponse.json({
     success: true,
     message: "Product deleted successfully!",
