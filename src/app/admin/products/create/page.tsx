@@ -1,4 +1,5 @@
 "use client";
+import SmallLoader from "@/components/essentials/SmallLoader";
 import "@/styles/admin/createproducts.scss";
 import { productSchema } from "@/zod/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -74,6 +75,11 @@ const Pages = () => {
     }
   };
 
+  const postData = async (formData: any) => {
+    const { data } = await axios.post("/api/products/create", formData);
+    return data;
+  };
+
   const onSubmit = async (data: any) => {
     const formData = {
       ...data,
@@ -81,14 +87,13 @@ const Pages = () => {
       status,
       featured,
     };
-
     try {
-      const { data } = await axios.post("/api/products/create", formData);
-      if (data.success) {
-        toast.success("Product created successfully");
-      } else {
-        toast.error(data.message);
-      }
+      const callFunction = postData(formData);
+      toast.promise(callFunction, {
+        loading: "Creating...",
+        error: "Some Error Occured!",
+        success: "Product Created Successfully....",
+      });
     } catch (error) {
       console.log(error);
     }
@@ -102,9 +107,15 @@ const Pages = () => {
             <p>Cancle</p>
           </button>
         </Link>
-        <button type="submit">
-          <AiOutlinePlus />
-          <p>Add Product</p>
+        <button disabled={isSubmitting} type="submit">
+          {isSubmitting ? (
+            <SmallLoader />
+          ) : (
+            <>
+              <AiOutlinePlus />
+              <p>Add Product</p>
+            </>
+          )}
         </button>
       </div>
       <div>
@@ -266,7 +277,11 @@ const Pages = () => {
               {images?.map((image: any, i: number) => {
                 if (i === 0) {
                   return (
-                    <div className="adminCreateProducts__simg_" key={i}>
+                    <div
+                      className="adminCreateProducts__simg_"
+                      key={i}
+                      onClick={() => setMimg(i)}
+                    >
                       <Image
                         src={image}
                         alt="product"
@@ -291,14 +306,12 @@ const Pages = () => {
                   );
                 }
                 return (
-                  <div className="adminCreateProducts__simg_" key={i}>
-                    <Image
-                      src={image}
-                      alt="product"
-                      width={100}
-                      height={100}
-                      onClick={() => setMimg(i)}
-                    />
+                  <div
+                    className="adminCreateProducts__simg_"
+                    key={i}
+                    onClick={() => setMimg(i)}
+                  >
+                    <Image src={image} alt="product" width={100} height={100} />
                     <div
                       onClick={() => {
                         setMimg(i - 1);
@@ -326,7 +339,7 @@ const Pages = () => {
           </div>
           <div className="adminCreateProducts__">
             <div>
-              <p>Status</p>
+              <p>Status & Featured</p>
               <Badge
                 // color={
                 //   product.status === "published"
@@ -343,29 +356,25 @@ const Pages = () => {
               </Badge>
             </div>
             <div style={{ marginBottom: "3rem" }}>
-              <Select.Root size={"3"}>
+              <p>Status</p>
+              <Select.Root
+                size={"3"}
+                onValueChange={(value) => setStatus(value)}
+                required
+              >
                 <Select.Trigger placeholder="Select a Status for Product…" />
                 <Select.Content position="popper">
-                  <Select.Item
-                    value="draft"
-                    onChange={() => setStatus("draft")}
-                  >
+                  <Select.Item value="draft">
                     <Badge color="orange" size={"2"}>
                       <p>Draft</p>
                     </Badge>
                   </Select.Item>
-                  <Select.Item
-                    value="published"
-                    onChange={() => setStatus("published")}
-                  >
+                  <Select.Item value="published">
                     <Badge color="green" size={"2"}>
                       <p>Publish</p>
                     </Badge>
                   </Select.Item>
-                  <Select.Item
-                    value="archived"
-                    onChange={() => setStatus("archived")}
-                  >
+                  <Select.Item value="archived">
                     <Badge color="red" size={"2"}>
                       <p>Archive</p>
                     </Badge>
@@ -373,21 +382,33 @@ const Pages = () => {
                 </Select.Content>
               </Select.Root>
             </div>
-            <Select.Root size={"3"}>
-              <Select.Trigger placeholder="Featured Product?" />
-              <Select.Content position="popper">
-                <Select.Item value="yes" onChange={() => setFeatured(true)}>
-                  <Badge color="green" size={"2"}>
-                    <p>Yes</p>
-                  </Badge>
-                </Select.Item>
-                <Select.Item value="no" onChange={() => setFeatured(false)}>
-                  <Badge color="red" size={"2"}>
-                    <p>No</p>
-                  </Badge>
-                </Select.Item>
-              </Select.Content>
-            </Select.Root>
+            <div>
+              <p>Featured</p>
+              <Select.Root
+                size={"3"}
+                onValueChange={(value) => {
+                  if (value === "yes") {
+                    setFeatured(true);
+                  } else {
+                    setFeatured(false);
+                  }
+                }}
+              >
+                <Select.Trigger placeholder="Featured Product?" />
+                <Select.Content position="popper">
+                  <Select.Item value="yes">
+                    <Badge color="green" size={"2"}>
+                      <p>Yes</p>
+                    </Badge>
+                  </Select.Item>
+                  <Select.Item value="no">
+                    <Badge color="red" size={"2"}>
+                      <p>No</p>
+                    </Badge>
+                  </Select.Item>
+                </Select.Content>
+              </Select.Root>
+            </div>
           </div>
           <div className="adminCreateProducts_">
             <p>Categories</p>

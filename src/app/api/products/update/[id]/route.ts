@@ -35,7 +35,6 @@ export async function PATCH(
       let images = [];
 
       images = body.images;
-      console.log(images);
       const imagesLinks = [];
       for (let i = 0; i < images.length; i++) {
         const result = await cloudinary.v2.uploader.upload(images[i], {

@@ -123,13 +123,23 @@ const Page = () => {
                 </div>
                 <div className="adminProducts__table_prod">
                   <div>
-                    <Image
-                      src={product.images[0].url}
-                      // src="/de.png"
-                      alt={product.name}
-                      width={250}
-                      height={250}
-                    />
+                    {product.images.length > 0 ? (
+                      <Image
+                        src={product.images[0].url}
+                        // src="/de.png"
+                        alt={product.name}
+                        width={250}
+                        height={250}
+                      />
+                    ) : (
+                      <Image
+                        // src={product.images[0].url}
+                        src="/de.png"
+                        alt={product.name}
+                        width={250}
+                        height={250}
+                      />
+                    )}
                   </div>
                   <p>{product.name}</p>
                 </div>

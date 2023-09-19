@@ -138,6 +138,9 @@
       }
       > .adminCreateProducts__simg_ {
         position: relative;
+        z-index: 1;
+        transition: 0.5s ease-in-out;
+        user-select: none;
         > :first-child {
           width: 100%;
           height: 100%;
@@ -147,7 +150,30 @@
           position: absolute;
           top: 0;
           right: 0;
-          margin: 1rem;
+          margin: 0.5rem;
+          font-size: 1.5rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 3rem;
+          height: 3rem;
+          background-color: colors.$background;
+          border-radius: 50%;
+          z-index: 2;
+          box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+          opacity: 0;
+          transition: 0.5s ease-in-out;
+        }
+        > :last-child:hover {
+          color: red;
+        }
+      }
+      > .adminCreateProducts__simg_:hover {
+        box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+        transition: 0.5s ease-in-out;
+        > :last-child {
+          opacity: 1;
+          transition: 0.5s ease-in-out;
         }
       }
     }
@@ -214,6 +240,11 @@
 }
 
 .dark {
+  .adminCreateProducts__simg_ {
+    > :last-child {
+      background-color: colors.$dark !important;
+    }
+  }
   .adminCreateProducts {
     > :first-child {
       button:first-child {

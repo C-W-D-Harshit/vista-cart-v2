@@ -54,3 +54,50 @@ export async function DELETE(
     message: "Product deleted successfully!",
   });
 }
+
+export async function POST(
+  req: NextRequest,
+  { params: { id } }: { params: { id: string } }
+) {
+  // check for admin
+  const isAdminAuthorized = await SessionChecker({ role: "admin" });
+
+  if (isAdminAuthorized !== true) {
+    return isAdminAuthorized;
+  }
+
+  // connect cloudinary
+  cloudinary.v2.config({
+    cloud_name: process.env.CLOUDINARY_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+  });
+
+  // connect DB
+  await connectMongoDB();
+
+  // create necessary fields
+  let product: any = {};
+
+  try {
+    const body = await req.json();
+    product = await Product.findById(id);
+    for (let i = 0; i < product.images.length; i++) {
+      await cloudinary.v2.uploader.destroy(
+        product.images[body.index].public_id
+      );
+    }
+    // Remove the image from the product's images array
+    product.images.splice(body.index, 1);
+  } catch (error: any) {
+    return NextResponse.json({
+      success: false,
+      message: error.message,
+    });
+  }
+  await product.save();
+  return NextResponse.json({
+    success: true,
+    message: "Product Image deleted successfully!",
+  });
+}
