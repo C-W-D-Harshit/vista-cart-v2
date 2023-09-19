@@ -29,7 +29,6 @@ export async function GET(req: NextRequest) {
 
   // take query
   const query = await QueryMaker(req);
-  console.log(query);
   // then do the rest simple work
   const features = new ApiFeatures(Product.find(), query)
     .filter()

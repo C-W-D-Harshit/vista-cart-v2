@@ -42,7 +42,7 @@ const Sidebar = () => {
     {
       icon: <BiSolidDashboard />,
       text: "overview",
-      link: "/admin",
+      link: "/admin/index",
     },
     {
       icon: <BsCart3 />,
@@ -79,6 +79,12 @@ const Sidebar = () => {
     signOut();
     toast.success("Logged Out!");
   };
+  const isActive = (menuItem: MenuItem) => {
+    if (menuItem.link === "/admin/index") {
+      return path === "/admin" || path.startsWith("/admin/");
+    }
+    return path.startsWith(menuItem.link);
+  };
   return (
     <div className="adminSidebar">
       <div className="adminSidebar__logo">
@@ -87,16 +93,43 @@ const Sidebar = () => {
       </div>
       <div className="adminSidebar__menu">
         {data.map((dat: MenuItem, i: number) => {
+          if (path === "/admin") {
+            const pat = "/admin/index";
+            return (
+              <div
+                key={i}
+                className={
+                  pat.startsWith(dat.link) ? "adminSidebar__menu_act" : ""
+                }
+              >
+                <Link href={dat.link === "/admin/index" ? "/admin" : dat.link}>
+                  {dat.icon}
+                  <p>{dat.text}</p>
+                </Link>
+                <div
+                  style={{
+                    opacity: pat === dat.link ? "1" : "0",
+                  }}
+                />
+              </div>
+            );
+          }
           return (
             <div
               key={i}
-              className={path === dat.link ? "adminSidebar__menu_act" : ""}
+              className={
+                path.startsWith(dat.link) ? "adminSidebar__menu_act" : ""
+              }
             >
-              <Link href={dat.link}>
+              <Link href={dat.link === "/admin/index" ? "/admin" : dat.link}>
                 {dat.icon}
                 <p>{dat.text}</p>
               </Link>
-              <div style={{ opacity: path === dat.link ? "1" : "0" }} />
+              <div
+                style={{
+                  opacity: path.startsWith(dat.link) ? "1" : "0",
+                }}
+              />
             </div>
           );
         })}

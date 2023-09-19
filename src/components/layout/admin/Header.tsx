@@ -17,7 +17,7 @@ const Header = () => {
   const path = usePathname();
   const data = [
     {
-      path: "/admin",
+      path: "/admin/index",
       title: "Dashboard",
       description: "Detailed information about your store",
     },
@@ -53,7 +53,13 @@ const Header = () => {
     },
   ];
 
-  const foundItems = data.filter((item) => path === item.path);
+  const foundItems = data.filter((item) => {
+    if (path === "/admin") {
+      return item.path === path;
+    } else {
+      return path.startsWith(item.path);
+    }
+  });
 
   const userName = session?.user?.name as string;
 
@@ -95,8 +101,8 @@ const Header = () => {
       ) : (
         // Render "Not Found" message only once
         <div>
-          <p>Not Found</p>
-          <p>Go Back To Main Menu</p>
+          <p>Dashboard</p>
+          <p>Detailed information about your store</p>
         </div>
       )}
       <div>

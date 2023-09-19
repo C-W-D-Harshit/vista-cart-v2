@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
   const features = new ApiFeatures(
     Product.find({
       status: "published",
-    }).select(" -featuredExpiry"),
+    }).select(" -featuredExpiry -createdAt -updatedAt -description"),
     query
   )
     .filter()
