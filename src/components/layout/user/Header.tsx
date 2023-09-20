@@ -10,12 +10,16 @@ import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import "@/styles/layout/user/header.scss";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const Header = () => {
   const { data: session }: { data: any } = useSession();
-  const user = false;
+  // console.log(session);
+  const router = useRouter();
+  // const user = false;
   const logout = async () => {
-    signOut();
+    signOut({ redirect: false });
+    router.push("/");
     toast.success("Logged Out!");
   };
   const userName = session?.user?.name as string;

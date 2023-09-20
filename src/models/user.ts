@@ -38,6 +38,13 @@ const userSchema = new Schema(
       enum: ["active", "blocked"],
       default: "active",
     },
+    verified: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+    verifyKey: Number,
+    verifyKeyExpires: Date,
     passwordChangedAt: Date,
     passwordResetToken: String,
     passwordResetExpires: Date,
@@ -80,16 +87,30 @@ userSchema.methods.createPasswordResetToken = function () {
   return resetToken;
 };
 
-userSchema.methods.createPasswordResetToken = function () {
-  const resetToken = crypto.randomBytes(32).toString("hex");
+userSchema.methods.createVerifyKey = function () {
+  function generateOTP() {
+    const otpLength = 6;
+    const min = Math.pow(10, otpLength - 1);
+    const max = Math.pow(10, otpLength) - 1;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
 
-  this.passwordResetToken = crypto
-    .createHash("sha256")
-    .update(resetToken)
-    .digest("hex");
-  this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+  this.verifyKey = generateOTP();
+  this.verifyKeyExpires = Date.now() + 10 * 60 * 1000;
+};
 
-  return resetToken;
+userSchema.methods.createVerifyKey = function () {
+  function generateOTP() {
+    const otpLength = 6;
+    const min = Math.pow(10, otpLength - 1);
+    const max = Math.pow(10, otpLength) - 1;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  this.verifyKey = generateOTP();
+  this.verifyKeyExpires = Date.now() + 10 * 60 * 1000;
+
+  return this.verifyKey; // Return the generated OTP
 };
 
 const User = models.User || mongoose.model("User", userSchema);

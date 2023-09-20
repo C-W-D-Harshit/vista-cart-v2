@@ -20,7 +20,6 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Loading from "../../loading";
 import axios from "axios";
-import SmallLoader from "@/components/essentials/SmallLoader";
 
 const signUpSchema = z.object({
   email: z.string().email(),
@@ -28,8 +27,8 @@ const signUpSchema = z.object({
 
 type signUpSchema = z.infer<typeof signUpSchema>;
 
-const Page = () => {
-  const { data: session, status } = useSession();
+const Pagse = () => {
+  const { data: session }: { data: any } = useSession();
   const router = useRouter();
   const {
     register,
@@ -40,63 +39,25 @@ const Page = () => {
     resolver: zodResolver(signUpSchema),
   });
 
-  if (session) {
-    router.push("/");
-    return;
-  }
-
-  const postData = async (formData: any) => {
-    const { data } = await axios.post("/api/user/forgot-password", formData);
-    if (data.success === false) {
-      throw new Error(data.message);
-    } else {
-      reset();
-      router.push("/auth/reset-password");
-      return data;
-    }
-  };
+  // if (session.user.verified !== false) {
+  //   router.push("/");
+  //   return;
+  // }
 
   const onSubmit = async (formData: any) => {
-    // Define a minimum delay of 0.8 seconds (2000 milliseconds)
-    const minimumDelay = 800;
-
-    // Delay the execution of gg function
-    await new Promise((resolve) => {
-      setTimeout(resolve, minimumDelay);
-    });
+    // Perform client-side validation (e.g., check for empty fields)
+    toast.loading("Sending email...", { duration: 1000 });
 
     // Trigger the sign-in process
     try {
-      const callFunction = postData(formData);
-      // toast.promise(callFunction, {
-      //   loading: "Validating...",
-      //   error: "OTP did'nt match! or is expired!",
-      //   success: "Verified Successfully....",
-      // });
-      toast.promise(
-        callFunction
-          .then((result: any) => {
-            // Handle success
-            return result; // Pass the result to the success callback
-          })
-          .catch((error: any) => {
-            // Handle error and get the error message
-            console.error(error.message);
-            return Promise.reject(error); // Pass the error to the error callback
-          }),
-        {
-          loading: "Sending OTP to your email...",
-          error: (error) => {
-            // Display the error message using toast.error
-            // toast.error(error.message);
-            return error.message; // Return the error message
-          },
-          success: "OTP Sent Successfully....",
-        }
-      );
-    } catch (error) {
-      toast.error("Something went wrong!");
-    }
+      const { data } = await axios.post("/api/user/forgot-password", formData);
+      if (data.success === false) {
+        toast.error(data.message);
+      }
+      toast.success(data.message);
+      reset();
+      router.push("/auth/reset-password");
+    } catch (error) {}
   };
   const defaultOptions = {
     loop: true,
@@ -145,7 +106,7 @@ const Page = () => {
                   className="bc"
                   style={{ marginBottom: "1.5rem" }}
                 >
-                  {isSubmitting ? <SmallLoader /> : "Submit"}
+                  Submit
                 </button>
               </form>
             </div>
@@ -162,4 +123,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default Pagse;

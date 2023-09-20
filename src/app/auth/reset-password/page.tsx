@@ -20,6 +20,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Loading from "../../loading";
 import axios from "axios";
+import SmallLoader from "@/components/essentials/SmallLoader";
 
 const signUpSchema = z
   .object({
@@ -50,20 +51,58 @@ const Page = () => {
     return;
   }
 
+  const postData = async (formData: any) => {
+    const { data } = await axios.post("/api/user/reset-password", formData);
+    if (data.success === false) {
+      throw new Error(data.message);
+    } else {
+      reset();
+      router.push("/auth/login");
+      return data;
+    }
+  };
+
   const onSubmit = async (formData: any) => {
-    // Perform client-side validation (e.g., check for empty fields)
-    toast.loading("Resetting password...", { duration: 2000 });
+    // Define a minimum delay of 0.8 seconds (2000 milliseconds)
+    const minimumDelay = 800;
+
+    // Delay the execution of gg function
+    await new Promise((resolve) => {
+      setTimeout(resolve, minimumDelay);
+    });
 
     // Trigger the sign-in process
     try {
-      const { data } = await axios.post("/api/user/reset-password", formData);
-      if (data.success === false) {
-        toast.error(data.message);
-      }
-      toast.success(data.message);
-      reset();
-      router.push("/auth/login");
-    } catch (error) {}
+      const callFunction = postData(formData);
+      // toast.promise(callFunction, {
+      //   loading: "Validating...",
+      //   error: "OTP did'nt match! or is expired!",
+      //   success: "Verified Successfully....",
+      // });
+      toast.promise(
+        callFunction
+          .then((result: any) => {
+            // Handle success
+            return result; // Pass the result to the success callback
+          })
+          .catch((error: any) => {
+            // Handle error and get the error message
+            console.error(error.message);
+            return Promise.reject(error); // Pass the error to the error callback
+          }),
+        {
+          loading: "Submitting...",
+          error: (error) => {
+            // Display the error message using toast.error
+            // toast.error(error.message);
+            return error.message; // Return the error message
+          },
+          success: "Password Reset Successfully....",
+        }
+      );
+    } catch (error) {
+      toast.error("Something went wrong!");
+    }
   };
   const defaultOptions = {
     loop: true,
@@ -136,7 +175,7 @@ const Page = () => {
                   className="bc"
                   style={{ marginBottom: "1.5rem" }}
                 >
-                  Submit
+                  {isSubmitting ? <SmallLoader /> : "Submit"}
                 </button>
               </form>
             </div>

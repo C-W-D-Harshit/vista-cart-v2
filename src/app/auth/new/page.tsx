@@ -21,15 +21,33 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Loading from "../../loading";
 import axios from "axios";
 import SmallLoader from "@/components/essentials/SmallLoader";
+import { BiReset } from "react-icons/bi";
 
 const signUpSchema = z.object({
-  email: z.string().email(),
+  otp: z
+    .number()
+    .refine(
+      (value) => Number.isInteger(value) && value >= 100000 && value <= 999999,
+      {
+        message: "OTP should be a 6-digit number",
+      }
+    ),
 });
 
 type signUpSchema = z.infer<typeof signUpSchema>;
 
-const Page = () => {
-  const { data: session, status } = useSession();
+const Page = ({
+  params,
+  searchParams,
+}: {
+  params: { slug: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+}) => {
+  const {
+    data: session,
+    status,
+    update,
+  }: { data: any; status: any; update: any } = useSession();
   const router = useRouter();
   const {
     register,
@@ -39,24 +57,32 @@ const Page = () => {
   } = useForm<signUpSchema>({
     resolver: zodResolver(signUpSchema),
   });
+  const [send, setSend] = React.useState(false);
 
-  if (session) {
+  if (session?.user.verified) {
     router.push("/");
     return;
   }
 
   const postData = async (formData: any) => {
-    const { data } = await axios.post("/api/user/forgot-password", formData);
+    const { data } = await axios.post("/api/user/verify", formData);
+    console.log(data);
     if (data.success === false) {
       throw new Error(data.message);
     } else {
-      reset();
-      router.push("/auth/reset-password");
+      update({
+        verified: true,
+      });
+      router.push("/auth/login");
       return data;
     }
   };
 
+  const { email } = searchParams;
   const onSubmit = async (formData: any) => {
+    // Perform client-side validation (e.g., check for empty fields)
+    const { otp } = formData;
+
     // Define a minimum delay of 0.8 seconds (2000 milliseconds)
     const minimumDelay = 800;
 
@@ -66,12 +92,78 @@ const Page = () => {
     });
 
     // Trigger the sign-in process
+    const data = {
+      email,
+      otp,
+    };
     try {
-      const callFunction = postData(formData);
+      const callFunction = postData(data);
       // toast.promise(callFunction, {
       //   loading: "Validating...",
       //   error: "OTP did'nt match! or is expired!",
       //   success: "Verified Successfully....",
+      // });
+      toast.promise(
+        callFunction
+          .then((result: any) => {
+            // Handle success
+            return result; // Pass the result to the success callback
+          })
+          .catch((error: any) => {
+            // Handle error and get the error message
+            console.error(error.message);
+            return Promise.reject(error); // Pass the error to the error callback
+          }),
+        {
+          loading: "Validating...",
+          error: (error) => {
+            // Display the error message using toast.error
+            // toast.error(error.message);
+            return error.message; // Return the error message
+          },
+          success: "Verified Successfully....",
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: animationData,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+    setScale: 1.5,
+  };
+  const post = async (formData: any) => {
+    const { data } = await axios.post("/api/user/resend", formData);
+    if (data.success === false) {
+      throw new Error(data.message);
+    } else {
+      return data;
+    }
+  };
+  const resend = async () => {
+    // Define a minimum delay of 0.8 seconds (2000 milliseconds)
+    setSend(true);
+    const minimumDelay = 800;
+
+    // Delay the execution of gg function
+    await new Promise((resolve) => {
+      setTimeout(resolve, minimumDelay);
+    });
+    // Trigger the sign-in process
+    const data = {
+      email,
+    };
+    try {
+      const callFunction = post(data);
+      // toast.promise(callFunction, {
+      //   loading: "Sending...",
+      //   error: "Something Went Wrong!",
+      //   success: "OTP Sent Successfully....",
       // });
       toast.promise(
         callFunction
@@ -91,21 +183,13 @@ const Page = () => {
             // toast.error(error.message);
             return error.message; // Return the error message
           },
-          success: "OTP Sent Successfully....",
+          success: "OTP Sent Successfully...",
         }
       );
     } catch (error) {
-      toast.error("Something went wrong!");
+      console.log(error);
     }
-  };
-  const defaultOptions = {
-    loop: true,
-    autoplay: true,
-    animationData: animationData,
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice",
-    },
-    setScale: 1.5,
+    setSend(false);
   };
 
   return (
@@ -128,15 +212,21 @@ const Page = () => {
           </Link>
           <div className="auth_form">
             <div className="auth_form_head">
-              <p>Forgot Password!</p>
-              <p>Please enter your email</p>
+              <p>Verify Email!</p>
+              <p>Please enter your OTP</p>
             </div>
             <div className="auth_form_">
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="group">
-                  <input type="email" {...register("email")} id="k" />
+                  <input
+                    type="number"
+                    {...register("otp", { valueAsNumber: true })}
+                    id="k"
+                  />
                   <span className="bar"></span>
-                  <label>Email</label>
+                  <label style={{ color: errors.otp ? "red" : "" }}>
+                    {errors.otp ? errors.otp.message : "OTP"}
+                  </label>
                 </div>
 
                 <button
@@ -146,6 +236,21 @@ const Page = () => {
                   style={{ marginBottom: "1.5rem" }}
                 >
                   {isSubmitting ? <SmallLoader /> : "Submit"}
+                </button>
+                <button
+                  className={send ? "bc" : "oath"}
+                  style={{ marginBottom: "1.5rem" }}
+                  type="button"
+                  onClick={resend}
+                >
+                  {send ? (
+                    <SmallLoader />
+                  ) : (
+                    <>
+                      <BiReset />
+                      Request OTP
+                    </>
+                  )}
                 </button>
               </form>
             </div>

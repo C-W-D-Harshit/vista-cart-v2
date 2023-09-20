@@ -1,7 +1,7 @@
 "use client";
 
 import "@/styles/layout/admin/Sidebar.scss";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { HiMiniShoppingBag } from "react-icons/hi2";
 import { BiSolidDashboard } from "react-icons/bi";
 import Link from "next/link";
@@ -23,6 +23,7 @@ interface MenuItem {
 
 const Sidebar = () => {
   const path = usePathname();
+  const router = useRouter();
   const { theme, setTheme } = useTheme();
   const [checked, setChecked] = useState(false);
 
@@ -76,7 +77,8 @@ const Sidebar = () => {
     },
   ];
   const logout = async () => {
-    signOut();
+    signOut({ redirect: false });
+    router.push("/");
     toast.success("Logged Out!");
   };
   const isActive = (menuItem: MenuItem) => {

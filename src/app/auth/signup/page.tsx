@@ -65,10 +65,10 @@ const Page = () => {
 
     try {
       // Trigger the sign-in process
-      const { data } = await axios.post("/api/register", formData);
+      const { data } = await axios.post("/api/user/register", formData);
       toast.success("Registered Successfully!");
       toast.success("Please Login to Continue!");
-      router.push("/auth/login");
+      router.push(`/auth/new?email=${email}`);
     } catch (error: any) {
       toast.error(error.response.data.message || "Their is some Error");
     }
@@ -85,7 +85,7 @@ const Page = () => {
   const login = async (provider: string) => {
     try {
       const lgin = await signIn(provider, {
-        callbackUrl: "http://localhost:3000/",
+        callbackUrl: process.env.NEXT_PUBLIC_URL,
       });
     } catch (error: any) {
       // Handle errors, possibly by displaying an error message using toast.error() or other means

@@ -1,9 +1,14 @@
+import { NextRequestWithAuth } from "next-auth/middleware";
 import connectMongoDB from "@/libs/mongo/dbConnect";
 import User from "@/models/user";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GitHubProvider from "next-auth/providers/github";
 import bcrypt from "bcryptjs";
 import GoogleProvider from "next-auth/providers/google";
+import requestIp from "request-ip";
+import ip from "ip";
+import { checkRateLimit, rateLimiter } from "@/utils/ratelimit";
+import { NextResponse } from "next/server";
 
 export const authOptions = {
   // Configure one or more authentication providers
@@ -19,18 +24,45 @@ export const authOptions = {
         email: { label: "Email", type: "email", placeholder: "Email" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials: any, req) {
+      async authorize(credentials: any, req: any) {
         const { email, password } = credentials;
+
+        // rate limit
+        await checkRateLimit();
+
         // Connect to the MongoDB database
         await connectMongoDB();
 
         // Find the user by email in your database
-        const user = await User.findOne({ email });
+        const user = await User.findOne({
+          email,
+          active: true,
+        });
+
+        if (!user) {
+          throw new Error("User not found!");
+        }
+        // if (!user.verified) throw new Error("Please verify your email first!");
+
+        if (user.status === "blocked") {
+          throw new Error("Your account is blocked!");
+        }
+        if (user.provider !== "credentials") {
+          throw new Error(
+            "Your email is already registered with a different provider"
+          );
+        }
+
+        // If the user exists, compare the passwords
+
+        const matchPass = bcrypt.compareSync(password, user.password);
+        if (!matchPass) throw new Error("Email or Password did'nt match!");
 
         if (
           user &&
+          user.status !== "blocked" &&
           user.provider === "credentials" &&
-          bcrypt.compareSync(password, user.password)
+          matchPass
         ) {
           // Passwords match, return the user object
           return user;
@@ -51,6 +83,9 @@ export const authOptions = {
   ],
   pages: {
     signIn: "/auth/login",
+    error: "/auth/error",
+    verifyRequest: "/auth/verify",
+    // newUser: "/auth/new",
   },
   callbacks: {
     async signIn({ user, account }: { user: any; account: any }) {
@@ -61,14 +96,17 @@ export const authOptions = {
       const provider = account.provider;
 
       // check if already exists
-      const existingUser = await User.findOne({ email });
+      const existingUser = await User.findOne({ email, active: true });
 
       if (existingUser) {
         // User already exists, check if the provider is the same
         if (existingUser.provider !== provider) {
           throw new Error(
-            "User is already registered with a different provider"
+            "Your email is already registered with a different provider"
           );
+        }
+        if (existingUser.status === "blocked") {
+          throw new Error("Your account is blocked!");
         }
       } else {
         // User does not exist, create a new user
@@ -77,7 +115,7 @@ export const authOptions = {
           email: user.email,
           password: "randomString",
           provider,
-          role: "user",
+          verified: true,
         });
       }
 
@@ -87,11 +125,16 @@ export const authOptions = {
       token,
       user,
       session,
+      trigger,
     }: {
       token: any;
       user: any;
       session: any;
+      trigger: any;
     }) {
+      if (trigger === "update" && session?.verified) {
+        token.verified = session.verified;
+      }
       if (user) {
         // first connect db
         await connectMongoDB();
@@ -106,6 +149,7 @@ export const authOptions = {
           ...token,
           id: user_._id,
           role: user_.role,
+          verified: user_.verified,
         };
       }
 
@@ -128,6 +172,7 @@ export const authOptions = {
           ...session.user,
           id: token.id,
           role: token.role,
+          verified: token.verified,
         },
       };
     },

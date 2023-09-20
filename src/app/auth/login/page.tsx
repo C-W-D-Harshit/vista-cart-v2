@@ -19,6 +19,7 @@ import { FieldValue, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Loading from "../../loading";
+import SmallLoader from "@/components/essentials/SmallLoader";
 
 const signUpSchema = z.object({
   email: z.string().email(),
@@ -43,31 +44,100 @@ const Page = () => {
     return;
   }
 
-  const onSubmit = async (data: any) => {
-    const { email, password } = data;
+  let err: string;
 
-    // Perform client-side validation (e.g., check for empty fields)
-    toast.loading("Logging you in...", { duration: 1000 });
+  if (session) {
+    router.push("/");
+    return;
+  }
 
-    // Trigger the sign-in process
+  const gg = async (email: string, password: string) => {
+    await new Promise((resolve) => {
+      setTimeout(resolve, 200);
+    });
     const result: any = await signIn("credentials", {
       redirect: false, // Set to false to handle redirect manually
       email,
       password,
     });
-
     // Check if sign-in was successful
     if (result.error) {
       // Handle sign-in error (display error message, etc.)
-      console.log("Sign-in error:", result);
-      toast.error("Login Failed!");
+      // console.log(result.error);
+      // toast.error(result.error);
+      throw new Error(result.error);
     } else {
       // Sign-in was successful, handle redirect or other actions
-      console.log("Sign-in successful:", result);
-      toast.success("Logged In!");
+      // toast.success("Logged In!");
       router.push("/");
     }
+    return result;
   };
+
+  // const onSubmit = async (data: any) => {
+  //   const { email, password } = data;
+
+  //   // Trigger the sign-in process
+  //   const fg: any = gg(email, password);
+  //   toast.promise(
+  //     fg
+  //       .then((result: any) => {
+  //         // Handle success
+  //         return result; // Pass the result to the success callback
+  //       })
+  //       .catch((error: any) => {
+  //         // Handle error and get the error message
+  //         console.error(error.message);
+  //         return Promise.reject(error); // Pass the error to the error callback
+  //       }),
+  //     {
+  //       loading: "Logging you in...",
+  //       error: (error) => {
+  //         // Display the error message using toast.error
+  //         // toast.error(error.message);
+  //         return error.message; // Return the error message
+  //       },
+  //       success: "Logged In Successfully....",
+  //     }
+  //   );
+  // };
+  const onSubmit = async (data: any) => {
+    const { email, password } = data;
+
+    // Define a minimum delay of 0.8 seconds (2000 milliseconds)
+    const minimumDelay = 800;
+
+    // Delay the execution of gg function
+    await new Promise((resolve) => {
+      setTimeout(resolve, minimumDelay);
+    });
+
+    // Trigger the sign-in process
+    const fg: any = gg(email, password);
+
+    toast.promise(
+      fg
+        .then((result: any) => {
+          // Handle success
+          return result; // Pass the result to the success callback
+        })
+        .catch((error: any) => {
+          // Handle error and get the error message
+          console.error(error.message);
+          return Promise.reject(error); // Pass the error to the error callback
+        }),
+      {
+        loading: "Logging you in...",
+        error: (error) => {
+          // Display the error message using toast.error
+          // toast.error(error.message);
+          return error.message; // Return the error message
+        },
+        success: "Logged In Successfully....",
+      }
+    );
+  };
+
   const defaultOptions = {
     loop: true,
     autoplay: true,
@@ -78,10 +148,13 @@ const Page = () => {
     setScale: 1.5,
   };
 
-  const login = (provider: string) => {
+  const login = async (provider: string) => {
     try {
-      signIn(provider, { callbackUrl: "http://localhost:3000/" });
-      toast.success("Logged In!");
+      const result = await signIn(provider, {
+        callbackUrl: "http://localhost:3000/",
+      });
+      console.log(result);
+      toast.loading("Logging in...!");
     } catch (error: any) {
       // Handle errors, possibly by displaying an error message using toast.error() or other means
       console.error("Login failed:", error);
@@ -138,7 +211,7 @@ const Page = () => {
                   className="bc"
                   style={{ marginBottom: "1.5rem" }}
                 >
-                  Log In
+                  {isSubmitting ? <SmallLoader /> : "Log In"}
                 </button>
                 <button
                   onClick={() => login("google")}

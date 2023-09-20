@@ -2,7 +2,7 @@
 
 import "@/styles/layout/admin/Header.scss";
 import { Avatar, Button, DropdownMenu, Tooltip } from "@radix-ui/themes";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { BiBell } from "react-icons/bi";
 import { AiOutlineDown } from "react-icons/ai";
 import { BsSearch } from "react-icons/bs";
@@ -13,6 +13,7 @@ import Image from "next/image";
 
 const Header = () => {
   const { data: session } = useSession();
+  const router = useRouter();
   // console.log(session);
   const path = usePathname();
   const data = [
@@ -85,7 +86,8 @@ const Header = () => {
   const userImage = session?.user?.image || "/user.avif";
 
   const logout = async () => {
-    signOut();
+    signOut({ redirect: false });
+    router.push("/");
     toast.success("Logged Out!");
   };
   return (
