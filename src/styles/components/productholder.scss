@@ -28,7 +28,10 @@
     width: 100%;
     display: flex;
     gap: 3rem;
-    flex-wrap: wrap;
+    overflow: hidden;
+    overflow-x: auto;
+    padding: 1rem 0.5rem;
+    // flex-wrap: wrap;
     // justify-content: center;
   }
 }

@@ -7,9 +7,12 @@ import ProductHolder from "@/components/ui/user/holder/ProductHolder";
 
 export default async function Home() {
   async function getData(feature: string) {
-    const res = await fetch(`${process.env.URL}/api/products?${feature}=true`, {
-      next: { revalidate: 60 },
-    });
+    const res = await fetch(
+      `${process.env.URL}/api/products?${feature}=true&limit=4`,
+      {
+        next: { revalidate: 60 },
+      }
+    );
     // The return value is *not* serialized
     // You can return Date, Map, Set, etc.
 

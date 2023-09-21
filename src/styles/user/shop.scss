@@ -1,0 +1,14 @@
+.shop {
+  width: 100%;
+  padding: 1rem 0;
+  > .shop__holder {
+    width: 100%;
+    display: flex;
+    gap: 3rem;
+    // overflow: hidden;
+    // overflow-x: auto;
+    padding: 1rem 0.5rem;
+    flex-wrap: wrap;
+    // justify-content: center;
+  }
+}

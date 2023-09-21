@@ -1,5 +1,5 @@
-import React from "react";
-import toast from "react-hot-toast";
+import ProductCard from "@/components/ui/user/cards/ProductCard";
+import "@/styles/user/shop.scss";
 
 async function getData(searchQuery: string) {
   const res = await fetch(
@@ -25,11 +25,18 @@ const Page = async ({
   searchParams: { query: string };
 }) => {
   const data = await getData(query);
-  console.log(data);
   return (
-    <div>
-      <h1>Hi Boss</h1>
-      <h1>{data.success ? "Success" : "Fail"}</h1>
+    <div className="shop">
+      <div></div>
+      <div className="shop__holder">
+        {data.products.length > 0 ? (
+          data.products.map((product: any) => {
+            return <ProductCard key={product.id} product={product} />;
+          })
+        ) : (
+          <h1>No Products Found</h1>
+        )}
+      </div>
     </div>
   );
 };

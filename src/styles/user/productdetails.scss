@@ -1,0 +1,72 @@
+@use "../colors";
+
+.productDetails {
+  width: 100%;
+  > .productDetails_1 {
+    width: 100%;
+    display: flex;
+    gap: 4rem;
+    > :first-child {
+      width: 35%;
+      //   padding: 1rem;
+    }
+    > :last-child {
+      width: 65%;
+      //   background-color: red;
+      //   padding: 1rem;
+    }
+    .productDetails_img {
+      user-select: none;
+      .productDetails_mimg {
+        width: 100%;
+        height: 55rem;
+        background-color: colors.$gray-50;
+        border-radius: 4rem;
+        padding: 7rem;
+        margin-bottom: 3rem;
+
+        > :first-child {
+          width: 100%;
+          height: 100%;
+          //   background-color: inherit;
+          object-fit: contain;
+          filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.1));
+        }
+      }
+
+      .productDetails_simg {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 3rem;
+        padding: 0.5rem;
+
+        > div {
+          width: 12rem;
+          height: 12rem;
+          background-color: colors.$gray-50;
+          padding: 2rem;
+          border-radius: 2rem;
+          border: 1px solid none;
+          cursor: pointer;
+          transition: 0.5s ease-in-out;
+          > :first-child {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.1));
+          }
+        }
+      }
+    }
+  }
+}
+
+.dark {
+  .productDetails_mimg {
+    background-color: colors.$l-dark !important;
+  }
+  .productDetails_simg > div {
+    background-color: colors.$l-dark !important;
+  }
+}
