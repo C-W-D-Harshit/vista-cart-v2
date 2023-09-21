@@ -7,7 +7,7 @@ import { Router } from "next/router";
 import React, { Suspense } from "react";
 import toast from "react-hot-toast";
 import Lottie from "react-lottie";
-import animationData from "@/animations/login-animation.json";
+import animationData from "@/animations/verify.json";
 import "@/styles/auth/login.scss";
 import { GiNinjaStar } from "react-icons/gi";
 import Link from "next/link";
@@ -66,7 +66,7 @@ const Page = ({
 
   const postData = async (formData: any) => {
     const { data } = await axios.post("/api/user/verify", formData);
-    console.log(data);
+    // console.log(data);
     if (data.success === false) {
       throw new Error(data.message);
     } else {
@@ -135,7 +135,7 @@ const Page = ({
     rendererSettings: {
       preserveAspectRatio: "xMidYMid slice",
     },
-    setScale: 1.5,
+    setScale: 1,
   };
   const post = async (formData: any) => {
     const { data } = await axios.post("/api/user/resend", formData);
@@ -213,7 +213,7 @@ const Page = ({
           <div className="auth_form">
             <div className="auth_form_head">
               <p>Verify Email!</p>
-              <p>Please enter your OTP</p>
+              <p>Please enter OTP set on your Email!</p>
             </div>
             <div className="auth_form_">
               <form onSubmit={handleSubmit(onSubmit)}>

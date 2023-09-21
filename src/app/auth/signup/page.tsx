@@ -7,7 +7,7 @@ import { Router } from "next/router";
 import React from "react";
 import toast from "react-hot-toast";
 import Lottie from "react-lottie";
-import animationData from "@/animations/login-animation.json";
+import animationData from "@/animations/signup.json";
 import "@/styles/auth/login.scss";
 import { GiNinjaStar } from "react-icons/gi";
 import Link from "next/link";
@@ -20,6 +20,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { signUpSchema } from "@/zod/schema";
+import SmallLoader from "@/components/essentials/SmallLoader";
 
 // const signUpSchema = z
 //   .object({
@@ -53,8 +54,30 @@ const Page = () => {
     router.push("/");
     return;
   }
+  const post = async (formData: any) => {
+    const { email, password } = formData;
+    const { data } = await axios.post("/api/user/register", formData);
+    if (data.success === false) {
+      throw new Error(data.message);
+    } else {
+      await signIn("credentials", {
+        redirect: false, // Set to false to handle redirect manually
+        email,
+        password,
+      });
+      router.push(`/auth/new?email=${formData.email}`);
+      return data;
+    }
+  };
 
   const onSubmit = async (formData_: any) => {
+    // Define a minimum delay of 0.8 seconds (2000 milliseconds)
+    const minimumDelay = 800;
+
+    // Delay the execution of gg function
+    await new Promise((resolve) => {
+      setTimeout(resolve, minimumDelay);
+    });
     const { name, email, password } = formData_;
 
     const formData = {
@@ -65,10 +88,28 @@ const Page = () => {
 
     try {
       // Trigger the sign-in process
-      const { data } = await axios.post("/api/user/register", formData);
-      toast.success("Registered Successfully!");
-      toast.success("Please Login to Continue!");
-      router.push(`/auth/new?email=${email}`);
+      const callFunction = post(formData);
+      toast.promise(
+        callFunction
+          .then((result: any) => {
+            // Handle success
+            return result; // Pass the result to the success callback
+          })
+          .catch((error: any) => {
+            // Handle error and get the error message
+            console.error(error.message);
+            return Promise.reject(error); // Pass the error to the error callback
+          }),
+        {
+          loading: "Signing Up...",
+          error: (error) => {
+            // Display the error message using toast.error
+            // toast.error(error.message);
+            return error.message; // Return the error message
+          },
+          success: "Sign Up Successfull!...",
+        }
+      );
     } catch (error: any) {
       toast.error(error.response.data.message || "Their is some Error");
     }
@@ -160,7 +201,7 @@ const Page = () => {
                   </Link>
                 </div>
                 <button className="bc" style={{ marginBottom: "1.5rem" }}>
-                  Sign Up
+                  {isSubmitting ? <SmallLoader /> : "Sign Up"}
                 </button>
                 <button
                   onClick={() => login("google")}

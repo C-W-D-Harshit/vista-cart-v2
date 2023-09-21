@@ -51,7 +51,8 @@
     "typeface-poppins": "^1.1.13",
     "typescript": "5.2.2",
     "validator": "^13.11.0",
-    "zod": "^3.22.2"
+    "zod": "^3.22.2",
+    "zustand": "^4.4.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",

@@ -33,7 +33,7 @@ const Page = () => {
   // const fetcher = (...args) => fetch(...args).then((res) => res.json());
   const fetcher = (url: string) => api.get(url).then((res) => res.data);
   const { data, error, mutate } = useSWR(
-    `/api/products/admin?keyword=${search}`,
+    `/api/products/admin?keyword=${search}&page=${page}`,
     fetcher
   );
 
@@ -46,32 +46,50 @@ const Page = () => {
     const searchQuery = event.currentTarget.searchQuery.value;
     setSearch(searchQuery);
   }
+  const postData = async (nn: any) => {
+    const { data } = await axios.delete(`/api/products/delete/${nn}`);
 
+    if (data.success === false) {
+      throw new Error(data.message);
+    } else {
+      mutate();
+      return data;
+    }
+  };
   const del = async (nn: number) => {
     try {
-      await axios.delete(`/api/products/delete/${nn}`);
-      toast.success("Deleted");
-      mutate();
+      const callFunction = postData(nn);
+      // toast.promise(callFunction, {
+      //   loading: "Validating...",
+      //   error: "OTP did'nt match! or is expired!",
+      //   success: "Verified Successfully....",
+      // });
+      toast.promise(
+        callFunction
+          .then((result: any) => {
+            // Handle success
+            return result; // Pass the result to the success callback
+          })
+          .catch((error: any) => {
+            // Handle error and get the error message
+            console.error(error.message);
+            return Promise.reject(error); // Pass the error to the error callback
+          }),
+        {
+          loading: "Deleting...",
+          error: (error) => {
+            // Display the error message using toast.error
+            // toast.error(error.message);
+            return error.message; // Return the error message
+          },
+          success: "Product Deleted Successfully...",
+        }
+      );
     } catch (err) {
       console.error(err);
     }
   };
 
-  // Function to toggle select all checkbox
-  const toggleSelectAll = () => {
-    setSelectAll(!selectAll);
-    setSelectedProducts(
-      selectAll ? [] : data.products.map((product: any) => product._id)
-    );
-  };
-
-  // Function to toggle an individual checkbox
-  const toggleCheckbox = (productId: string) => {
-    const updatedSelectedProducts = selectedProducts.includes(productId)
-      ? selectedProducts.filter((id) => id !== productId)
-      : [...selectedProducts, productId];
-    setSelectedProducts(updatedSelectedProducts);
-  };
   return (
     <div className="adminProducts">
       <div className="adminProducts__top">

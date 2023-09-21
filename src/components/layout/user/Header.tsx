@@ -10,12 +10,16 @@ import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import "@/styles/layout/user/header.scss";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import useCartStore from "@/store/cart";
+import useStore from "@/store/store";
 
 const Header = () => {
   const { data: session }: { data: any } = useSession();
   // console.log(session);
   const router = useRouter();
+  const cartNo = useStore(useCartStore, (state) => state.cartQuantity);
+  // console.log(store);
   // const user = false;
   const logout = async () => {
     signOut({ redirect: false });
@@ -44,15 +48,26 @@ const Header = () => {
   const firstName = session?.user ? extractFirstName(userName) : "User";
 
   const userImage = session?.user?.image || "/user.avif";
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const searchQuery = event.currentTarget.searchQuery.value;
+    router.push(`/shop?query=${searchQuery}`);
+  }
+  // const cartNo = cartItems.reduce((total, item) => total + item.quantity, 0);
+
   return (
     <div className="header">
-      <div className="header__search">
+      <form onSubmit={handleSubmit} className="header__search">
         <AiOutlineSearch />
-        <input type="text" placeholder="Search for Products..." />
-      </div>
+        <input
+          type="text"
+          name="searchQuery"
+          placeholder="Search for Products..."
+        />
+      </form>
       <div className="header__cart">
         <BiCart />
-        <span>3</span>
+        <span>{cartNo}</span>
       </div>
       <div className="header__cart">
         <BiHeart />

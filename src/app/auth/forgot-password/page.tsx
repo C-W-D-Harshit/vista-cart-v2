@@ -7,7 +7,7 @@ import { Router } from "next/router";
 import React, { Suspense } from "react";
 import toast from "react-hot-toast";
 import Lottie from "react-lottie";
-import animationData from "@/animations/login-animation.json";
+import animationData from "@/animations/forgot.json";
 import "@/styles/auth/login.scss";
 import { GiNinjaStar } from "react-icons/gi";
 import Link from "next/link";

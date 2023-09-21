@@ -47,11 +47,45 @@ const Page = () => {
     setSearch(searchQuery);
   }
 
+  const postData = async (nn: any) => {
+    const { data } = await axios.delete(`/api/users/admin/delete/${nn}`);
+
+    if (data.success === false) {
+      throw new Error(data.message);
+    } else {
+      mutate();
+      return data;
+    }
+  };
   const del = async (nn: number) => {
     try {
-      await axios.delete(`/api/user/delete/${nn}`);
-      toast.success("Deleted");
-      mutate();
+      const callFunction = postData(nn);
+      // toast.promise(callFunction, {
+      //   loading: "Validating...",
+      //   error: "OTP did'nt match! or is expired!",
+      //   success: "Verified Successfully....",
+      // });
+      toast.promise(
+        callFunction
+          .then((result: any) => {
+            // Handle success
+            return result; // Pass the result to the success callback
+          })
+          .catch((error: any) => {
+            // Handle error and get the error message
+            console.error(error.message);
+            return Promise.reject(error); // Pass the error to the error callback
+          }),
+        {
+          loading: "Deleting...",
+          error: (error) => {
+            // Display the error message using toast.error
+            // toast.error(error.message);
+            return error.message; // Return the error message
+          },
+          success: "User Deleted Successfully...",
+        }
+      );
     } catch (err) {
       console.error(err);
     }
@@ -113,25 +147,59 @@ const Page = () => {
                   </div>
                   <p>{product.name}</p>
                 </div>
-                <div style={{ textTransform: "lowercase" }}>
-                  <p>{product.email}</p>
-                </div>
                 <div>
-                  <p>{product.provider}</p>
-                </div>
-                <div>
-                  <p>{product.role}</p>
+                  <p style={{ textTransform: "lowercase" }}>{product.email}</p>
                 </div>
                 <div>
                   <Badge
-                    color={product.status === "active" ? "green" : "red"}
+                    color={
+                      product.provider === "google"
+                        ? "blue"
+                        : product.provider === "github"
+                        ? "green"
+                        : "gray"
+                    }
                     size={"2"}
                   >
-                    <p>{product.status}</p>
+                    <p>{product.provider}</p>
                   </Badge>
                 </div>
                 <div>
-                  <Link href={`/admin/products/${product._id}`}>
+                  <p>
+                    <Badge
+                      color={
+                        product.role === "admin"
+                          ? "amber"
+                          : product.role === "seller"
+                          ? "green"
+                          : "gray"
+                      }
+                      size={"2"}
+                    >
+                      <p>{product.role}</p>
+                    </Badge>
+                  </p>
+                </div>
+                <div>
+                  <Badge
+                    color={
+                      product.verified === false
+                        ? "brown"
+                        : product.status === "active"
+                        ? "green"
+                        : "red"
+                    }
+                    size={"2"}
+                  >
+                    <p>
+                      {product.verified === false
+                        ? "Not Verified"
+                        : product.status}
+                    </p>
+                  </Badge>
+                </div>
+                <div>
+                  <Link href={`/admin/customers/${product._id}`}>
                     <button>
                       <AiOutlineEdit />
                     </button>
@@ -159,7 +227,7 @@ const Page = () => {
             <Loader />
           </div>
         )}
-        {data?.users?.length === 0 && <h1>Product Not Found!</h1>}
+        {data?.users?.length === 0 && <h1>User Not Found!</h1>}
         {data?.totalPages > 1 && (
           <div className="adminPagination">
             <div>

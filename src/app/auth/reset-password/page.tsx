@@ -7,7 +7,7 @@ import { Router } from "next/router";
 import React, { Suspense } from "react";
 import toast from "react-hot-toast";
 import Lottie from "react-lottie";
-import animationData from "@/animations/login-animation.json";
+import animationData from "@/animations/reset.json";
 import "@/styles/auth/login.scss";
 import { GiNinjaStar } from "react-icons/gi";
 import Link from "next/link";
@@ -111,7 +111,7 @@ const Page = () => {
     rendererSettings: {
       preserveAspectRatio: "xMidYMid slice",
     },
-    setScale: 1.5,
+    setScale: 1,
   };
 
   return (
@@ -135,7 +135,7 @@ const Page = () => {
           <div className="auth_form">
             <div className="auth_form_head">
               <p>Now you can reset password!</p>
-              <p>Please enter your email</p>
+              <p>Reset token sent to your email!</p>
             </div>
             <div className="auth_form_">
               <form onSubmit={handleSubmit(onSubmit)}>

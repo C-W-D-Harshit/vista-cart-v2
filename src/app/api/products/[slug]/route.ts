@@ -13,7 +13,7 @@ export async function GET(
   await connectMongoDB();
 
   // find product in DB
-  const product = await Product.find({
+  const product = await Product.findOne({
     slug,
     status: "published",
   });

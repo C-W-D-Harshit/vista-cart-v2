@@ -1,11 +1,27 @@
-import Loader from "@/components/essentials/Loader";
 import CategoryHolder from "@/components/ui/user/home/CategoryHolder";
 import Image from "next/image";
 import React from "react";
 import { BsLightningCharge } from "react-icons/bs";
 import "@/styles/user/home.scss";
+import ProductHolder from "@/components/ui/user/holder/ProductHolder";
 
-export default function Home() {
+export default async function Home() {
+  async function getData(feature: string) {
+    const res = await fetch(`${process.env.URL}/api/products?${feature}=true`, {
+      next: { revalidate: 60 },
+    });
+    // The return value is *not* serialized
+    // You can return Date, Map, Set, etc.
+
+    if (!res.ok) {
+      // This will activate the closest `error.js` Error Boundary
+      throw new Error("Failed to fetch data");
+    }
+
+    return res.json();
+  }
+  const featuredProducts = await getData("featured");
+  const newArrival = await getData("newArrival");
   return (
     <main className="home">
       <section className="home1">
@@ -52,6 +68,20 @@ export default function Home() {
         </div>
       </div>
       <CategoryHolder />
+      {featuredProducts?.products?.length > 0 && (
+        <ProductHolder
+          products={featuredProducts.products}
+          title="Featured Products"
+          link="/shop/featured"
+        />
+      )}
+      {newArrival?.products?.length > 0 && (
+        <ProductHolder
+          products={newArrival.products}
+          title="New Arrival"
+          link="/shop/new"
+        />
+      )}
     </main>
   );
 }

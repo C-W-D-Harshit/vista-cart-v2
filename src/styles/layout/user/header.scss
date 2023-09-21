@@ -29,12 +29,25 @@
   font-weight: 500;
   background-color: colors.$gray-50;
   color: black !important;
+  position: relative;
+  z-index: 1;
+  overflow: visible; /* Add this to allow the last child to overflow */
   > :first-child {
     margin-right: 1rem;
     font-size: 2.5rem;
   }
-  > :last-child {
+  > input {
     color: black !important;
+  }
+  > div {
+    position: absolute;
+    top: 100%; /* Position below its parent */
+    left: 0; /* Align with the left edge of its parent */
+    width: 100%;
+    background-color: #fff;
+    z-index: 2;
+    padding: 1rem 1.5rem;
+    display: none; /* Initially hide the last child */
   }
 }
 

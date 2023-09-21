@@ -1,0 +1,34 @@
+@use "../colors";
+
+.productHolder {
+  width: 100%;
+  padding: 1rem 0;
+  > :first-child {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    > :first-child {
+      font-size: 2.8rem;
+      font-weight: 600;
+      width: fit-content;
+      min-width: max-content;
+    }
+    > :last-child {
+      color: colors.$primary-500;
+      font-size: 1.8rem;
+      font-weight: 500;
+    }
+    > :last-child:hover {
+      text-decoration: underline colors.$primary-500;
+    }
+  }
+  > :last-child {
+    width: 100%;
+    display: flex;
+    gap: 3rem;
+    flex-wrap: wrap;
+    // justify-content: center;
+  }
+}

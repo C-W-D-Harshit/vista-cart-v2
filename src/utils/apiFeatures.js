@@ -55,16 +55,23 @@ class ApiFeatures {
 
   search() {
     if (this.queryStr.keyword) {
-      const keyword = this.queryStr.keyword
-        ? {
-            name: {
-              $regex: this.queryStr.keyword,
-              $options: "i",
-            },
-          }
-        : {};
+      let keyword = this.queryStr.keyword;
 
-      this.query = this.query.find({ ...keyword });
+      // Check if the keyword contains URL encoding, and if so, decode it
+      if (/%[0-9A-Fa-f]{2}/.test(keyword)) {
+        keyword = decodeURIComponent(keyword);
+      }
+
+      // Define the keyword filter to use in the query
+      const keywordFilter = {
+        name: {
+          $regex: keyword,
+          $options: "i", // Case-insensitive search
+        },
+      };
+
+      // Update the query with the keyword filter
+      this.query = this.query.find(keywordFilter);
     }
     return this;
   }
