@@ -11,7 +11,8 @@
     width: 100%;
     padding: 4rem 5rem;
     padding-bottom: 0;
-    overflow: auto;
+    overflow: hidden;
+    overflow-y: auto;
     > * {
       margin: 3rem 0;
     }
@@ -39,6 +40,11 @@
     }
     > :last-child {
       padding: 2rem 3rem;
+      scrollbar-width: none !important; /* Firefox */
+      -ms-overflow-style: none; /* Internet Explorer and Edge */
+    }
+    > :last-child::-webkit-scrollbar {
+      display: none !important;
     }
   }
 }

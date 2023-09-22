@@ -132,12 +132,12 @@ const InfoComp = ({ data }: { data: any }) => {
           size={"3"}
           onClick={() => {
             setWish(!wish);
-            if (wish) {
+            if (isProductInWishlist(data.product.id)) {
+              removeFromWishlist(data.product.id);
+            } else {
               addToWishlist({
                 productId: data.product.id,
               });
-            } else {
-              removeFromWishlist(data.product.id);
             }
           }}
           //   disabled={isProductInWishlist(data.product.id)}

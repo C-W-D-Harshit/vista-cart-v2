@@ -35,3 +35,15 @@
     // justify-content: center;
   }
 }
+
+@media (max-width: 768px) {
+  .productHolder {
+    > :last-child {
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* Internet Explorer and Edge */
+    }
+    > :last-child::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}

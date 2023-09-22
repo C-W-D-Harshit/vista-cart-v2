@@ -11,4 +11,24 @@
     flex-wrap: wrap;
     // justify-content: center;
   }
+  > .shop_header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding-bottom: 1rem;
+    overflow: hidden;
+    overflow-x: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer and Edge */
+  }
+  > .shop_header:-webkit-scrollbar {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .shop__holder {
+    justify-content: center;
+  }
 }
