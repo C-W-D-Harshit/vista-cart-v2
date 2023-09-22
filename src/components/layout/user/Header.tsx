@@ -13,12 +13,14 @@ import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import useCartStore from "@/store/cart";
 import useStore from "@/store/store";
+import useWishlistStore from "@/store/wishlist";
 
 const Header = () => {
   const { data: session }: { data: any } = useSession();
   // console.log(session);
   const router = useRouter();
   const cartNo = useStore(useCartStore, (state) => state.cartQuantity);
+  const wishlistNo = useStore(useWishlistStore, (state) => state.wishlistCount);
   // console.log(store);
   // const user = false;
   const logout = async () => {
@@ -71,7 +73,7 @@ const Header = () => {
       </div>
       <div className="header__cart">
         <BiHeart />
-        <span className="span_v">2</span>
+        <span className="span_v">{wishlistNo}</span>
       </div>
       {session ? (
         <div className="header__user">

@@ -1,6 +1,6 @@
 import ImgCom from "@/components/ui/user/shop/ImgCom";
 import "@/styles/user/productdetails.scss";
-import Image from "next/image";
+import InfoComp from "../../../components/ui/user/shop/InfoComp";
 
 async function getData(slug: string) {
   const res = await fetch(`${process.env.URL}/api/products/${slug}`, {
@@ -23,7 +23,7 @@ const Page = async ({ params: { slug } }: { params: { slug: string } }) => {
     <div className="productDetails">
       <div className="productDetails_1">
         <ImgCom data={data} />
-        <div className="productDetails_info"></div>
+        <InfoComp data={data} />
       </div>
     </div>
   );
