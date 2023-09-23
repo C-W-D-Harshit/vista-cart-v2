@@ -13,7 +13,7 @@ import { useUrl } from "nextjs-current-url";
 const Shopheader = ({ query }: { query: string }) => {
   const router = useRouter();
   const handleSort = (value: string) => {
-    router.push(`/shop?query=${query}&sort=${value}`);
+    router.push(`/shop?query=${query ?? ""}&sort=${value}`);
   };
   return (
     <div className="shop_header">

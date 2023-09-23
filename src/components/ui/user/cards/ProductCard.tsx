@@ -33,6 +33,10 @@ const ProductCard = ({ product }: { product: any }) => {
             addToCart({
               productId: product._id,
               quantity: 1,
+              image: product.images[0].url,
+              name: product.name,
+              price: product.price,
+              stock: product.stock,
               //   finalPrice: 15.99, // Optional final price
             });
             toast.success("Added to cart!");

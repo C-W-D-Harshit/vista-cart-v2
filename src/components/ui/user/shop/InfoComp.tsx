@@ -11,11 +11,12 @@ import { BiCartAdd, BiHeart } from "react-icons/bi";
 import { FaExclamationCircle, FaShoppingCart } from "react-icons/fa";
 import { BsHandbagFill } from "react-icons/bs";
 import useWishlistStore from "@/store/wishlist";
-import { set } from "mongoose";
+import { MdDelete } from "react-icons/md";
 
 const InfoComp = ({ data }: { data: any }) => {
   const cart = useStore(useCartStore, (state) => state.cartItems);
-  const item = cart.find((item) => item.productId === data.product.id);
+  const [c, setC] = useState(false);
+
   const { addToCart, removeFromCart } = useCartStore();
   const { addToWishlist, removeFromWishlist } = useWishlistStore();
   const wishlistItems = useWishlistStore((state) => state.wishlistItems);
@@ -25,17 +26,24 @@ const InfoComp = ({ data }: { data: any }) => {
   const isProductInWishlist = (productId: string) => {
     return wishlistItems.some((item) => item.productId === productId);
   };
+  let item = cart.find((item) => item.productId === data.product.id);
+  let quan = item ? item.quantity : 1;
 
-  //   const quantity = item ? item.quantity : 1;
+  function updateQuantityOnClick() {
+    item = cart.find((item) => item.productId === data.product.id);
+    quan = item ? item.quantity : 1;
+
+    // Do something with the 'quan' variable, e.g., update the UI or perform some action.
+  }
   //   console.log(cart);
 
   const [quantity, setQuantity] = useState(1);
 
-  const handleAddToCart = (id: string) => {
-    if (data.product.stock > quantity) {
-      addToCart({ productId: id, quantity: 1 });
-    }
-  };
+  // const handleAddToCart = (id: string) => {
+  //   if (data.product.stock > quantity) {
+  //     addToCart({ productId: id, quantity: 1 });
+  //   }
+  // };
   const stock = data.product.stock - 10;
   return (
     <div className="productDetails_info">
@@ -69,30 +77,74 @@ const InfoComp = ({ data }: { data: any }) => {
               //   addToCart({ productId: data.product.id, quantity: 1 });
               setQuantity(quantity + 1);
             }}
-            disabled={stock < quantity || quantity > 10}
+            disabled={stock === quantity || quantity > 10}
           >
             <AiOutlinePlus />
           </button>
         </div>
-        <Button
-          size={"3"}
-          onClick={() => {
-            addToCart({ productId: data.product.id, quantity });
-          }}
-          disabled={stock < quantity || quantity > 10}
-        >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "2rem",
+        {c ? (
+          <Button
+            size={"3"}
+            variant="outline"
+            color="crimson"
+            onClick={() => {
+              // updateQuantityOnClick();
+              // setC(true);
+              // addToCart({
+              //   productId: data.product.id,
+              //   quantity,
+              //   image: data.product.images[0].url,
+              //   name: data.product.name,
+              //   price: data.product.price,
+              //   stock,
+              // });
+              removeFromCart(data.product.id);
+              setC(false);
             }}
+            // disabled={quantity > 10 || quantity === stock || quan === stock}
           >
-            <BiCartAdd />
-          </div>
-          <p>Add To Cart</p>
-        </Button>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "2rem",
+              }}
+            >
+              <MdDelete />
+            </div>
+            <p>Remove From Cart</p>
+          </Button>
+        ) : (
+          <Button
+            size={"3"}
+            onClick={() => {
+              updateQuantityOnClick();
+              setC(true);
+              addToCart({
+                productId: data.product.id,
+                quantity,
+                image: data.product.images[0].url,
+                name: data.product.name,
+                price: data.product.price,
+                stock,
+              });
+            }}
+            disabled={quantity > 10 || quantity === stock || quan === stock}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "2rem",
+              }}
+            >
+              <BiCartAdd />
+            </div>
+            <p>Add To Cart</p>
+          </Button>
+        )}
       </div>
       <div className="productDetails_btn">
         <Button size={"4"} radius="full" variant="classic" disabled={stock < 1}>

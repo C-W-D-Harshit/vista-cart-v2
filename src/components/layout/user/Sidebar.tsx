@@ -19,13 +19,18 @@ import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
 const Sidebar = () => {
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme, resolvedTheme, systemTheme } = useTheme();
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
     // Your logic to determine the initial state
-    const initialCheckedState = localStorage.getItem("theme") === "dark";
+    const initialCheckedState =
+      localStorage.getItem("theme") === "dark" ||
+      localStorage.getItem("theme") === "system";
     setChecked(initialCheckedState);
+    // const theme = systemTheme;
+    // setChecked(theme === "dark");
+    // console.log(checked, theme, resolvedTheme, theme);
   }, []);
 
   const toggleDarkMode = () => {

@@ -7,7 +7,7 @@ import { Theme, ThemePanel } from "@radix-ui/themes";
 
 function NextThemeProvider({ children }: { children: React.ReactNode }) {
   return (
-    <ThemeProvider attribute="class">
+    <ThemeProvider enableSystem={true} attribute="class">
       <Theme>{children}</Theme>
     </ThemeProvider>
   );

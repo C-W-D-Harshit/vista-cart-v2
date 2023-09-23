@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { devtools, persist } from "zustand/middleware";
+import { createJSONStorage, devtools, persist } from "zustand/middleware";
 
 interface WishlistProduct {
   productId: string;
@@ -58,7 +58,11 @@ const useWishlistStore = create<WishlistState>()(
           set({ wishlistItems: [], wishlistCount: 0 }); // Reset wishlistCount
         },
       }),
-      { name: "wishlistStore" }
+      {
+        name: "wishlistStore",
+        storage: createJSONStorage(() => localStorage),
+        skipHydration: true,
+      }
     )
   )
 );

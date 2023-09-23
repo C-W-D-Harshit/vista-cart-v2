@@ -41,7 +41,8 @@
     > :last-child {
       padding: 2rem 3rem;
       scrollbar-width: none !important; /* Firefox */
-      -ms-overflow-style: none; /* Internet Explorer and Edge */
+      -ms-overflow-style: none;
+      margin-bottom: 6rem; /* Internet Explorer and Edge */
     }
     > :last-child::-webkit-scrollbar {
       display: none !important;
