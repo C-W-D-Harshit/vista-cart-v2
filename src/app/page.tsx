@@ -8,7 +8,7 @@ import ProductHolder from "@/components/ui/user/holder/ProductHolder";
 export default async function Home() {
   async function getData(feature: string) {
     const res = await fetch(
-      `${process.env.URL}/api/products?${feature}=true&limit=4`,
+      `${process.env.NEXT_PUBLIC_URL}/api/products?${feature}=true&limit=4`,
       {
         next: { revalidate: 60 },
       }
