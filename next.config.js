@@ -5,6 +5,7 @@ const nextConfig = {
   },
   experimental: {
     esmExternals: false,
+    serverActions: true,
   },
 };
 
