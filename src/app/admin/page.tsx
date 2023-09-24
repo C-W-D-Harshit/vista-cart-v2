@@ -1,7 +1,6 @@
 "use client";
 
 import "@/styles/admin/overview.scss";
-import { Separator } from "@radix-ui/react-separator";
 import { AiFillFire, AiOutlineShoppingCart } from "react-icons/ai";
 import { FiBarChart2 } from "react-icons/fi";
 import { Bar, Line } from "react-chartjs-2";
