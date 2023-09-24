@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { Toaster } from "react-hot-toast";
 import NextTopLoader from "nextjs-toploader";
 import AuthSessionProvider from "@/providers/AuthSessionProvider";
+import { Analytics } from "@vercel/analytics/react";
 
 export const metadata: Metadata = {
   title: "Vista Cart",
@@ -30,6 +31,7 @@ export default function RootLayout({
             <LayoutProvider>{children}</LayoutProvider>
           </NextThemeProvider>
         </AuthSessionProvider>
+        <Analytics />
       </body>
     </html>
   );
