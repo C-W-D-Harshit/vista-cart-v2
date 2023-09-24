@@ -133,6 +133,38 @@ const productSchema = new mongoose.Schema(
       default: "draft",
       enum: ["draft", "published", "archived"],
     },
+    variation: {
+      type: Boolean,
+      default: false,
+    },
+    variations: [
+      {
+        variationType: {
+          type: String,
+          required: true,
+          enum: ["color", "size", "other"],
+        },
+        variationValue: {
+          type: String,
+          required: true,
+        },
+        variationPrice: {
+          type: Number,
+          required: true,
+        },
+        variationStock: {
+          type: Number,
+          required: true,
+        },
+        variationSalePrice: {
+          type: Number,
+        },
+        VariationIsOnSale: {
+          type: Boolean,
+          required: true,
+        },
+      },
+    ],
   },
   {
     timestamps: true, // Use timestamps for createdAt and updatedAt fields
