@@ -14,6 +14,12 @@ export default withAuth(
     ) {
       return new NextResponse("You are not authorized!");
     }
+    if (
+      req.nextUrl.pathname.startsWith("/checkout") &&
+      req.nextauth.token?.verified !== true
+    ) {
+      return new NextResponse("You are not authorized!");
+    }
   },
   {
     callbacks: {
@@ -32,6 +38,7 @@ export default withAuth(
 export const config = {
   matcher: [
     "/admin/:anything*",
+    "/checkout/:anything*",
     // "/((?!api|auth|_next/static|_next/image|favicon.ico).*)",
     // "/((?!api|auth|_next/static|_next/image|favicon.ico).*)|/admin/(.+)",
   ],

@@ -138,7 +138,9 @@ const Page = () => {
               <p>Total</p>
               <p>₹{(cart?.cartTotalPrice as number) + 40}</p>
             </div>
-            <button>Proceed To Checkout</button>
+            <Link href={`/checkout?ref=addToCart`}>
+              <button>Proceed To Checkout</button>
+            </Link>
           </div>
         </div>
       ) : (

@@ -66,3 +66,43 @@ export const productSchema = z
   });
 
 export type productSchema = z.infer<typeof productSchema>;
+
+export const addressSchema = z.object({
+  name: z
+    .string()
+    .min(3, "Name should have at least 3 characters")
+    .max(30, "Name should have at most 30 characters"),
+  email: z.string(),
+  phoneNumber: z.number().refine(
+    (value) => {
+      // Convert the number to a string
+      const phoneNumberString = String(value);
+
+      // You can add custom validation logic for phone numbers here.
+      // For example, you can check if the phone number matches a specific format.
+      // This is just a placeholder; replace it with your actual validation logic.
+      return /^[0-9]{10}$/.test(phoneNumberString); // Assuming a 10-digit phone number format
+    },
+    {
+      message: "Invalid phone number format. Use a 10-digit number.",
+    }
+  ),
+  address: z.string(),
+  city: z.string(),
+  state: z.string(),
+  postalCode: z.number().refine(
+    (value) => {
+      // Convert the number to a string
+      const postalCodeString = String(value);
+
+      // You can add custom validation logic for postal codes here.
+      // This is just a placeholder; replace it with your actual validation logic.
+      return /^[0-9]{6}$/.test(postalCodeString); // Assuming a 6-digit postal code format
+    },
+    {
+      message: "Invalid postal code format. Use a 6-digit number.",
+    }
+  ),
+});
+
+export type addressSchema = z.infer<typeof addressSchema>;

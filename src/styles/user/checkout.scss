@@ -1,0 +1,133 @@
+@use "../colors";
+
+.checkout {
+  width: 100%;
+  display: flex;
+  gap: 4rem;
+
+  > * {
+    height: 100%;
+    padding: 3rem;
+    border-radius: 1.5rem;
+    border: 1px solid colors.$gray-100;
+    box-shadow: inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.075),
+      /* shadow ring 👇 */ 0 0 0 1px hsla(0, 0%, 0%, 0.05),
+      /* multiple soft shadows 👇 */ 0 0.3px 0.4px hsla(0, 0%, 0%, 0.02),
+      0 0.9px 1.5px hsla(0, 0%, 0%, 0.045), 0 3.5px 6px hsla(0, 0%, 0%, 0.09);
+    > p {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 2rem;
+    }
+  }
+
+  > :first-child {
+    width: 60%;
+    // background-color: red;
+  }
+
+  > :last-child {
+    width: 35%;
+    // background-color: blue;
+  }
+
+  .addressForm {
+    .checkout_input {
+      margin: 1rem 0;
+      width: 100%;
+      .checkout_err {
+        color: red !important;
+      }
+      > p {
+        font-size: 1.7rem;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+      }
+      > input {
+        width: 100%;
+        padding: 1rem 1.5rem;
+        border-radius: 0.5rem;
+        border: 1.3px solid colors.$gray-100;
+        background-color: colors.$gray-50;
+      }
+    }
+
+    .checkout_2 {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+  }
+}
+
+.orderCard {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  height: 100%;
+  margin: 1rem 0;
+  .orderCard_img {
+    width: 12rem;
+    height: 10rem;
+    padding: 1.5rem;
+    background-color: colors.$gray-50;
+    border-radius: 1rem;
+    > :first-child {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.1));
+    }
+  }
+  .orderCard_info {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    > :first-child {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      > :first-child {
+        font-size: 1.9rem;
+        font-weight: 500;
+      }
+      > :last-child {
+        font-size: 1.6rem;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+.checkout_ {
+  width: 100%;
+  > div {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0.5rem 0;
+  }
+}
+
+.dark {
+  .checkout {
+    > * {
+      border: 1px solid colors.$l-dark;
+    }
+  }
+  .checkout_input {
+    > input {
+      background-color: colors.$l-dark !important;
+      border: 1.3px solid colors.$black-800 !important;
+    }
+  }
+  .orderCard_img {
+    background-color: colors.$l-dark;
+  }
+}

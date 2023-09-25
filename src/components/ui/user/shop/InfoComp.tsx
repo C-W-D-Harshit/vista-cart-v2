@@ -13,8 +13,13 @@ import { BsHandbagFill } from "react-icons/bs";
 import useWishlistStore from "@/store/wishlist";
 import { MdDelete } from "react-icons/md";
 import useOrderStore from "@/store/order";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import toast from "react-hot-toast";
 
 const InfoComp = ({ data }: { data: any }) => {
+  const router = useRouter();
+  const { data: session }: { data: any } = useSession();
   const cart = useStore(useCartStore, (state) => state.cartItems);
   const [c, setC] = useState(false);
 
@@ -42,14 +47,20 @@ const InfoComp = ({ data }: { data: any }) => {
 
   // buy now
   const handleBuyNow = () => {
-    addToOrder({
-      image: data.product.images[0].url,
-      name: data.product.name,
-      price: data.product.price,
-      quantity: 1,
-      productId: data.product.id,
-      slug: data.product.slug,
-    });
+    // addToOrder({
+    //   image: data.product.images[0].url,
+    //   name: data.product.name,
+    //   price: data.product.price,
+    //   quantity: 1,
+    //   productId: data.product.id,
+    //   slug: data.product.slug,
+    // });
+    // console.log(session);
+    if (session && session.user.verified) {
+      router.push(`/checkout?ref=buyNow&&product=${data.product.slug}`);
+    } else {
+      toast.error("Please verify your email first!");
+    }
   };
   return (
     <div className="productDetails_info">
