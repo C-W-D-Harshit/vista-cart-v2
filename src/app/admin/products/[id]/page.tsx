@@ -299,17 +299,6 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
                   {errors.tax ? <p>{errors.tax.message}</p> : <p></p>}
                 </div>
               </div>
-              <div>
-                <div className="adminCreateProducts__input">
-                  <p>Product SKU</p>
-                  <input
-                    type="text"
-                    placeholder="Type product sku here..."
-                    {...register("sku")}
-                  />
-                  {errors.sku ? <p>{errors.sku.message}</p> : <p></p>}
-                </div>
-              </div>
             </div>
           </div>
           {/* <div className="adminCreateProducts_">
