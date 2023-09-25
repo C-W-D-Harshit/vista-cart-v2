@@ -3,7 +3,7 @@ import SmallLoader from "@/components/essentials/SmallLoader";
 import "@/styles/admin/createproducts.scss";
 import { productSchema } from "@/zod/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Badge, Select } from "@radix-ui/themes";
+import { Badge, Checkbox, Flex, Select, Switch, Text } from "@radix-ui/themes";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
@@ -28,6 +28,7 @@ const Pages = () => {
   const [mimg, setMimg] = useState(0);
   const [status, setStatus] = useState<any>("draft");
   const [featured, setFeatured] = useState(false);
+  const [variationSwitch, setVariationSwitch] = useState(false);
   const fileInputRef = useRef<any>(null);
 
   // handle add img
@@ -206,19 +207,11 @@ const Pages = () => {
                   {errors.tax ? <p>{errors.tax.message}</p> : <p></p>}
                 </div>
               </div>
-              <div>
-                <div className="adminCreateProducts__input">
-                  <p>Product SKU</p>
-                  <input
-                    type="text"
-                    placeholder="Type product sku here..."
-                    {...register("sku")}
-                  />
-                  {errors.sku ? <p>{errors.sku.message}</p> : <p></p>}
-                </div>
-              </div>
             </div>
           </div>
+          {/* <div className="adminCreateProducts_">
+            <div className="adminVar"></div>
+          </div> */}
           {/* <div className="adminCreateProducts_">
           <p>Variations</p>
           <div className="adminCreatedProducts_2">

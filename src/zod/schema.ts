@@ -47,10 +47,6 @@ export const productSchema = z
       .positive("Product stock should be positive")
       .min(1, "Product stock should be atleast 1")
       .max(1000, "Product stock should be atmost 1000"),
-    sku: z
-      .string()
-      .min(3, "SKU should have atleast 3 characters")
-      .max(50, "SKU should have atmost 50 character"),
     category: z
       .string()
       .min(3, "Category should have atleast 3 characters")
