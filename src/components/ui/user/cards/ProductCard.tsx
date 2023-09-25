@@ -37,6 +37,7 @@ const ProductCard = ({ product }: { product: any }) => {
               name: product.name,
               price: product.price,
               stock: product.stock,
+              slug: product.slug,
               //   finalPrice: 15.99, // Optional final price
             });
             toast.success("Added to cart!");

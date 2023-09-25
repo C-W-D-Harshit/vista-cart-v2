@@ -36,14 +36,14 @@ const Page = () => {
                   <Fragment key={i}>
                     <div>
                       <div>
-                        <div className="cart_img">
+                        <Link href={`/shop/${item.slug}`} className="cart_img">
                           <Image
                             src={item.image}
                             alt={item.name}
                             width={100}
                             height={100}
                           />
-                        </div>
+                        </Link>
                       </div>
                       <p>{item.name}</p>
                       <p>₹{item.price}</p>
@@ -59,6 +59,7 @@ const Page = () => {
                                 name: item.name,
                                 price: item.price,
                                 stock: item.stock,
+                                slug: item.slug,
                               });
                             } else {
                               removeFromCart(item.productId);
@@ -77,6 +78,7 @@ const Page = () => {
                               name: item.name,
                               price: item.price,
                               stock: item.stock,
+                              slug: item.slug,
                             });
                           }}
                           disabled={
@@ -123,14 +125,18 @@ const Page = () => {
                 <p>{cart?.cartQuantity}</p>
               </div>
               <div>
+                <p>Delivery</p>
+                <p>₹40</p>
+              </div>
+              <div>
                 <p>Subtotal</p>
-                <p>₹{cart?.cartTotalPrice}</p>
+                <p>₹{(cart?.cartTotalPrice as number) + 40}</p>
               </div>
             </div>
             <Separator size={"4"} />
             <div className="cart_tot">
               <p>Total</p>
-              <p>₹{cart?.cartTotalPrice}</p>
+              <p>₹{(cart?.cartTotalPrice as number) + 40}</p>
             </div>
             <button>Proceed To Checkout</button>
           </div>

@@ -12,6 +12,7 @@ import { FaExclamationCircle, FaShoppingCart } from "react-icons/fa";
 import { BsHandbagFill } from "react-icons/bs";
 import useWishlistStore from "@/store/wishlist";
 import { MdDelete } from "react-icons/md";
+import useOrderStore from "@/store/order";
 
 const InfoComp = ({ data }: { data: any }) => {
   const cart = useStore(useCartStore, (state) => state.cartItems);
@@ -19,6 +20,7 @@ const InfoComp = ({ data }: { data: any }) => {
 
   const { addToCart, removeFromCart } = useCartStore();
   const { addToWishlist, removeFromWishlist } = useWishlistStore();
+  const { addToOrder } = useOrderStore();
   const wishlistItems = useWishlistStore((state) => state.wishlistItems);
   const [wish, setWish] = useState(false);
 
@@ -32,19 +34,23 @@ const InfoComp = ({ data }: { data: any }) => {
   function updateQuantityOnClick() {
     item = cart.find((item) => item.productId === data.product.id);
     quan = item ? item.quantity : 1;
-
-    // Do something with the 'quan' variable, e.g., update the UI or perform some action.
   }
-  //   console.log(cart);
 
   const [quantity, setQuantity] = useState(1);
 
-  // const handleAddToCart = (id: string) => {
-  //   if (data.product.stock > quantity) {
-  //     addToCart({ productId: id, quantity: 1 });
-  //   }
-  // };
   const stock = data.product.stock - 10;
+
+  // buy now
+  const handleBuyNow = () => {
+    addToOrder({
+      image: data.product.images[0].url,
+      name: data.product.name,
+      price: data.product.price,
+      quantity: 1,
+      productId: data.product.id,
+      slug: data.product.slug,
+    });
+  };
   return (
     <div className="productDetails_info">
       <p className="productDetails_brand">{data.product.brand}</p>
@@ -63,10 +69,7 @@ const InfoComp = ({ data }: { data: any }) => {
       <div className="productDetails_counter">
         <div>
           <button
-            onClick={() =>
-              //   addToCart({ productId: data.product.id, quantity: -1 })
-              setQuantity(quantity - 1)
-            }
+            onClick={() => setQuantity(quantity - 1)}
             disabled={quantity === 1}
           >
             <AiOutlineMinus />
@@ -74,7 +77,6 @@ const InfoComp = ({ data }: { data: any }) => {
           <p>{quantity}</p>
           <button
             onClick={() => {
-              //   addToCart({ productId: data.product.id, quantity: 1 });
               setQuantity(quantity + 1);
             }}
             disabled={stock === quantity || quantity > 10}
@@ -88,20 +90,9 @@ const InfoComp = ({ data }: { data: any }) => {
             variant="outline"
             color="crimson"
             onClick={() => {
-              // updateQuantityOnClick();
-              // setC(true);
-              // addToCart({
-              //   productId: data.product.id,
-              //   quantity,
-              //   image: data.product.images[0].url,
-              //   name: data.product.name,
-              //   price: data.product.price,
-              //   stock,
-              // });
               removeFromCart(data.product.id);
               setC(false);
             }}
-            // disabled={quantity > 10 || quantity === stock || quan === stock}
           >
             <div
               style={{
@@ -128,6 +119,7 @@ const InfoComp = ({ data }: { data: any }) => {
                 name: data.product.name,
                 price: data.product.price,
                 stock,
+                slug: data.product.slug,
               });
             }}
             disabled={quantity > 10 || quantity === stock || quan === stock}
@@ -147,7 +139,13 @@ const InfoComp = ({ data }: { data: any }) => {
         )}
       </div>
       <div className="productDetails_btn">
-        <Button size={"4"} radius="full" variant="classic" disabled={stock < 1}>
+        <Button
+          size={"4"}
+          radius="full"
+          variant="classic"
+          disabled={stock < 1}
+          onClick={handleBuyNow}
+        >
           {stock > 1 ? (
             <>
               <div

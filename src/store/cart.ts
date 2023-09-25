@@ -9,6 +9,7 @@ interface CartProduct {
   price: number;
   quantity: number;
   stock: number;
+  slug: string;
   finalPrice?: number | null;
   totalPrice?: number | null;
 }
