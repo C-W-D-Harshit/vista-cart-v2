@@ -131,3 +131,16 @@
     background-color: colors.$l-dark;
   }
 }
+
+@media (max-width: 768px) {
+  .checkout {
+    flex-direction: column;
+    > * {
+      width: 100% !important;
+    }
+  }
+  .checkout_2 {
+    flex-direction: column;
+    gap: 0 !important;
+  }
+}
