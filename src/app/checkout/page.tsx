@@ -35,7 +35,17 @@ async function getUser() {
     throw new Error("Failed to fetch data");
   }
 
-  return res.json();
+  const data: any = await res.json();
+  const user_ = {
+    ...data.user,
+  };
+  const user = {
+    id: user_._id,
+    name: user_.name,
+    email: user_.email,
+  };
+
+  return user;
 }
 
 const Page = async ({
@@ -44,13 +54,7 @@ const Page = async ({
   searchParams: { product: string; ref: string };
 }) => {
   let user = await getUser();
-  user = user.user;
 
-  user = {
-    id: user._id,
-    name: user.name,
-    email: user.email,
-  };
   console.log(user);
 
   // user = JSON.parse(JSON.stringify(user));
