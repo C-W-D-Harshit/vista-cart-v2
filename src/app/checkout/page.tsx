@@ -54,7 +54,7 @@ const Page = async ({
 }: {
   searchParams: { product: string; ref: string };
 }) => {
-  let user = await getUser();
+  let user = getUser();
 
   // console.log(user);
 
