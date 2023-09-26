@@ -14,14 +14,6 @@ export async function GET(req: NextRequest, res: any) {
     });
   }
 
-  // if not session then
-  if (!session) {
-    return NextResponse.json({
-      success: false,
-      session: null,
-    });
-  }
-
   // lets find the user in DB
   // We would be using email because thats what we are getting from session
   let user = null;
