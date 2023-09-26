@@ -8,6 +8,7 @@ import Order from "@/models/order";
 import { resend } from "../user/register/route";
 import User from "@/models/user";
 import { OrderCompletedEmailTemplate } from "@/components/templates/email/Order-Completed";
+import Product from "@/models/product";
 
 export async function POST(req: NextRequest) {
   // rate limit
@@ -73,6 +74,19 @@ export async function POST(req: NextRequest) {
         orderDate,
       }),
     });
+
+    await Promise.all(
+      order.products.map(async (orderProduct: any) => {
+        // Find the current product
+        const currentProduct = await Product.findById(orderProduct.productId);
+
+        // Update the stock based on the current product state
+        if (currentProduct) {
+          currentProduct.stock -= orderProduct.quantity;
+          await currentProduct.save();
+        }
+      })
+    );
 
     // execute the order
     return NextResponse.json({

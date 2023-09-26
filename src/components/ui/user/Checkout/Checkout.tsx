@@ -41,6 +41,7 @@ const Checkout = ({
   }, [session?.user, reset]);
   const cartItems: any = useStore(useCartStore, (state) => state.cartItems);
   const cart = useStore(useCartStore, (state) => state);
+  const { clearCart } = useCartStore();
 
   const gg = async (formData: any) => {
     await new Promise((resolve) => {
@@ -49,9 +50,12 @@ const Checkout = ({
     let data;
     try {
       const { data } = await axios.post(`/api/order`, formData);
-      router.push(
+      router.replace(
         `/order-complete?orderId=${data.order._id}&paymentId=${data.order.paymentID}`
       );
+      if (refral === "addToCart") {
+        clearCart();
+      }
     } catch (error: any) {
       throw new Error(error.message);
     }

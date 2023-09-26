@@ -1,9 +1,10 @@
 "use client";
 
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect } from "react";
 import Lottie from "react-lottie";
 import animationData from "@/animations/order-complete.json";
 import "@/styles/user/orderCompleted.scss";
+import { useRouter } from "next/navigation";
 
 const Page = ({
   searchParams: { orderId, paymentId },
