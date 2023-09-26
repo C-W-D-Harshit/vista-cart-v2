@@ -22,10 +22,11 @@ async function getData(slug: string) {
 }
 
 async function getUser() {
+  const header = headers();
   const res = await fetch(`${process.env.URL}/api/user/me`, {
     // cache: "force-cache",
     method: "GET",
-    headers: headers(),
+    headers: header,
   });
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.
