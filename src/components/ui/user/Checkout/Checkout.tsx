@@ -12,13 +12,12 @@ import useCartStore from "@/store/cart";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 const Checkout = ({
-  user,
   refral,
   data,
 }: {
-  user: any;
   refral: string;
   data: any | undefined;
 }) => {
@@ -31,14 +30,15 @@ const Checkout = ({
   } = useForm<addressSchema>({
     resolver: zodResolver(addressSchema),
   });
+  const { data: session }: { data: any } = useSession();
   useMemo(() => {
-    if (!user) return null;
+    if (!session.user) return null;
 
     reset({
-      name: user.name,
-      email: user.email,
+      name: session.user.name,
+      email: session.user.email,
     });
-  }, [user, reset]);
+  }, [session.user, reset]);
   const cartItems: any = useStore(useCartStore, (state) => state.cartItems);
   const cart = useStore(useCartStore, (state) => state);
 
@@ -69,7 +69,7 @@ const Checkout = ({
           },
         ],
         address,
-        userID: user.id,
+        userID: session.user.id,
         totalPrice: data.price + 40,
       };
       console.log(formData);
@@ -77,7 +77,7 @@ const Checkout = ({
       formData = {
         products: cartItems,
         address,
-        userID: user.id,
+        userID: session.user.id,
         totalPrice: (cart?.cartTotalPrice as number) + 40,
       };
       console.log(formData);
