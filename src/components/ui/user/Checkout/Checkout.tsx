@@ -32,13 +32,13 @@ const Checkout = ({
   });
   const { data: session }: { data: any } = useSession();
   useMemo(() => {
-    if (!session.user) return null;
+    if (!session?.user) return null;
 
     reset({
-      name: session.user.name,
-      email: session.user.email,
+      name: session?.user.name,
+      email: session?.user.email,
     });
-  }, [session.user, reset]);
+  }, [session?.user, reset]);
   const cartItems: any = useStore(useCartStore, (state) => state.cartItems);
   const cart = useStore(useCartStore, (state) => state);
 
@@ -108,87 +108,89 @@ const Checkout = ({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="checkout">
-        <div className="addressForm">
-          <p>Shipping Address</p>
-          <div className="checkout_input">
-            {errors.name ? (
-              <p className="checkout_err">{errors.name.message}</p>
-            ) : (
-              <p>Full name</p>
-            )}
-            <input
-              type="text"
-              placeholder="Enter your full name"
-              {...register("name")}
-            />
-          </div>
-          <div className="checkout_2">
+        <div>
+          <div className="addressForm">
+            <p>Shipping Address</p>
             <div className="checkout_input">
-              {errors.email ? (
-                <p className="checkout_err">{errors.email.message}</p>
+              {errors.name ? (
+                <p className="checkout_err">{errors.name.message}</p>
               ) : (
-                <p>Email</p>
+                <p>Full name</p>
               )}
               <input
-                type="email"
-                placeholder="Enter your email"
-                {...register("email")}
+                type="text"
+                placeholder="Enter your full name"
+                {...register("name")}
               />
             </div>
+            <div className="checkout_2">
+              <div className="checkout_input">
+                {errors.email ? (
+                  <p className="checkout_err">{errors.email.message}</p>
+                ) : (
+                  <p>Email</p>
+                )}
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  {...register("email")}
+                />
+              </div>
+              <div className="checkout_input">
+                {errors.phoneNumber ? (
+                  <p className="checkout_err">{errors.phoneNumber.message}</p>
+                ) : (
+                  <p>Phone Number</p>
+                )}
+                <input
+                  type="number"
+                  placeholder="Enter your phone number"
+                  {...register("phoneNumber", { valueAsNumber: true })}
+                />
+              </div>
+            </div>
             <div className="checkout_input">
-              {errors.phoneNumber ? (
-                <p className="checkout_err">{errors.phoneNumber.message}</p>
+              {errors.address ? (
+                <p className="checkout_err">{errors.address.message}</p>
               ) : (
-                <p>Phone Number</p>
+                <p>Address</p>
+              )}
+              <input
+                type="text"
+                placeholder="Enter your street name and house number"
+                {...register("address")}
+              />
+            </div>
+            <div className="checkout_2">
+              <div className="checkout_input">
+                {errors.city ? (
+                  <p className="checkout_err">{errors.city.message}</p>
+                ) : (
+                  <p>City</p>
+                )}
+                <input type="text" placeholder="City" {...register("city")} />
+              </div>
+              <div className="checkout_input">
+                {errors.state ? (
+                  <p className="checkout_err">{errors.state.message}</p>
+                ) : (
+                  <p>State</p>
+                )}
+                <input type="text" placeholder="State" {...register("state")} />
+              </div>
+            </div>
+            <div className="checkout_input">
+              {errors.postalCode ? (
+                <p className="checkout_err">{errors.postalCode.message}</p>
+              ) : (
+                <p>Postal Code</p>
               )}
               <input
                 type="number"
-                placeholder="Enter your phone number"
-                {...register("phoneNumber", { valueAsNumber: true })}
+                placeholder="Enter your postal code"
+                {...register("postalCode", { valueAsNumber: true })}
               />
             </div>
-          </div>
-          <div className="checkout_input">
-            {errors.address ? (
-              <p className="checkout_err">{errors.address.message}</p>
-            ) : (
-              <p>Address</p>
-            )}
-            <input
-              type="text"
-              placeholder="Enter your street name and house number"
-              {...register("address")}
-            />
-          </div>
-          <div className="checkout_2">
-            <div className="checkout_input">
-              {errors.city ? (
-                <p className="checkout_err">{errors.city.message}</p>
-              ) : (
-                <p>City</p>
-              )}
-              <input type="text" placeholder="City" {...register("city")} />
-            </div>
-            <div className="checkout_input">
-              {errors.state ? (
-                <p className="checkout_err">{errors.state.message}</p>
-              ) : (
-                <p>State</p>
-              )}
-              <input type="text" placeholder="State" {...register("state")} />
-            </div>
-          </div>
-          <div className="checkout_input">
-            {errors.postalCode ? (
-              <p className="checkout_err">{errors.postalCode.message}</p>
-            ) : (
-              <p>Postal Code</p>
-            )}
-            <input
-              type="number"
-              placeholder="Enter your postal code"
-              {...register("postalCode", { valueAsNumber: true })}
-            />
           </div>
         </div>
         {refral === "buyNow" ? (
@@ -210,7 +212,10 @@ const Checkout = ({
               <p>Total</p>
               <p>₹{data.price + 40}</p>
             </div>
-            <Button>Continue to Pay</Button>
+            <Button mr={"6"}>Pay with COD</Button>
+            <Button color="green" disabled>
+              Pay Online
+            </Button>
           </div>
         ) : (
           <div className="checkout_">
@@ -233,7 +238,10 @@ const Checkout = ({
               <p>Total</p>
               <p>₹{(cart?.cartTotalPrice as number) + 40}</p>
             </div>
-            <Button>Continue to Pay</Button>
+            <Button mr={"6"}>Pay with COD</Button>
+            <Button color="green" disabled>
+              Pay Online
+            </Button>
           </div>
         )}
       </div>

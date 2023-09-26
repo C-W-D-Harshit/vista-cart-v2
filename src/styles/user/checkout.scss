@@ -23,6 +23,13 @@
 
   > :first-child {
     width: 60%;
+    > * {
+      > p {
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 2rem;
+      }
+    }
     // background-color: red;
   }
 
