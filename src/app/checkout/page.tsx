@@ -26,7 +26,6 @@ async function getUser() {
     // cache: "force-cache",
     method: "GET",
     headers: headers(),
-    next: { revalidate: 60 },
   });
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.
@@ -36,17 +35,18 @@ async function getUser() {
     throw new Error("Failed to fetch data");
   }
 
-  const data: any = await res.json();
-  const user_ = {
-    ...data.user,
-  };
-  const user = {
-    id: user_._id,
-    name: user_.name,
-    email: user_.email,
-  };
+  // const data: any = await res.json();
+  // const user_ = {
+  //   ...data.user,
+  // };
+  // const user = {
+  //   id: user_._id,
+  //   name: user_.name,
+  //   email: user_.email,
+  // };
 
-  return user;
+  // return user;
+  return res.json();
 }
 
 const Page = async ({
@@ -54,7 +54,16 @@ const Page = async ({
 }: {
   searchParams: { product: string; ref: string };
 }) => {
-  let user = getUser();
+  let user: any = await getUser();
+
+  user = {
+    ...user.user,
+  };
+  user = {
+    id: user._id,
+    name: user.name,
+    email: user.email,
+  };
 
   // console.log(user);
 
@@ -69,3 +78,5 @@ const Page = async ({
 };
 
 export default Page;
+
+export const revalidate = 0;

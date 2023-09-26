@@ -4,7 +4,6 @@ const nextConfig = {
     domains: ["lh3.googleusercontent.com", "res.cloudinary.com"],
   },
   experimental: {
-    esmExternals: false,
     serverActions: true,
   },
 };
