@@ -7,7 +7,7 @@ import User from "@/models/user";
 
 async function getData(slug: string) {
   const res = await fetch(`${process.env.URL}/api/products/${slug}`, {
-    next: { revalidate: 60 },
+    cache: "force-cache",
   });
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.
