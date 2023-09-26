@@ -4,10 +4,11 @@ import Checkout from "@/components/ui/user/Checkout/Checkout";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 import User from "@/models/user";
+import { headers } from "next/headers";
 
 async function getData(slug: string) {
   const res = await fetch(`${process.env.URL}/api/products/${slug}`, {
-    cache: "force-cache",
+    next: { revalidate: 60 },
   });
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.
@@ -21,22 +22,20 @@ async function getData(slug: string) {
 }
 
 async function getUser() {
-  const session: any = await getServerSession();
+  const res = await fetch(`${process.env.URL}/api/user/me`, {
+    cache: "force-cache",
+    method: "GET",
+    headers: headers(),
+  });
+  // The return value is *not* serialized
+  // You can return Date, Map, Set, etc.
 
-  // if not session then
-  if (!session) {
-    throw new Error(`No Session`);
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    throw new Error("Failed to fetch data");
   }
 
-  // lets find the user in DB
-  // We would be using email because thats what we are getting from session
-  let user = null;
-  try {
-    user = await User.findOne({ email: session.user.email });
-    return user;
-  } catch (error: any) {
-    throw new Error(error.message);
-  }
+  return res.json();
 }
 
 const Page = async ({
@@ -45,20 +44,23 @@ const Page = async ({
   searchParams: { product: string; ref: string };
 }) => {
   let user = await getUser();
+  user = user.user;
 
   user = {
     id: user._id,
     name: user.name,
     email: user.email,
   };
+  console.log(user);
 
-  user = JSON.parse(JSON.stringify(user));
+  // user = JSON.parse(JSON.stringify(user));
   let data: any = {};
   if (ref === "buyNow") {
     data = await getData(product);
     data = data.product;
   }
   return <Checkout user={user} data={data} refral={ref} />;
+  // return <h1>Hi</h1>;
 };
 
 export default Page;

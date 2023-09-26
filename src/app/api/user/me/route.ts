@@ -5,7 +5,14 @@ import { authOptions } from "../../auth/[...nextauth]/options";
 
 export async function GET(req: NextRequest, res: any) {
   // first check for session
-  const session: any = await getServerSession();
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return NextResponse.json({
+      success: false,
+      message: "You are not authorized to perform this action!",
+    });
+  }
 
   // if not session then
   if (!session) {
