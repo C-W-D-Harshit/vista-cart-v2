@@ -23,9 +23,10 @@ async function getData(slug: string) {
 
 async function getUser() {
   const res = await fetch(`${process.env.URL}/api/user/me`, {
-    cache: "force-cache",
+    // cache: "force-cache",
     method: "GET",
     headers: headers(),
+    next: { revalidate: 60 },
   });
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.
@@ -55,7 +56,7 @@ const Page = async ({
 }) => {
   let user = await getUser();
 
-  console.log(user);
+  // console.log(user);
 
   // user = JSON.parse(JSON.stringify(user));
   let data: any = {};
