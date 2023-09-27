@@ -19,7 +19,7 @@ async function getData() {
   // find user
   const user = await User.findById(userID);
 
-  if (!user) throw new Error("User not found!");
+  // if (!user) throw new Error("User not found!");
 
   return user;
 }
@@ -34,7 +34,6 @@ const Page = async () => {
     const email = e.get("email")?.toString();
     const phoneNumber = parseFloat(phoneNumberString);
     const id = e.get("id")?.toString();
-    console.log(id);
 
     const formData = {
       name,
