@@ -40,8 +40,6 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
       </div>
     );
   }
-  console.log("user", data);
-  console.log("orders", ordersData);
 
   const handleStatus = async (value: string) => {
     await axios.patch(`/api/user/${id}`, {
