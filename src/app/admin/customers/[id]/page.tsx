@@ -10,11 +10,6 @@ import { Badge, Select } from "@radix-ui/themes";
 import { useSession } from "next-auth/react";
 
 const Page = ({ params: { id } }: { params: { id: string } }) => {
-  const {
-    data: session,
-    status,
-    update,
-  }: { data: any; status: any; update: any } = useSession();
   // get data
   const api = axios.create({
     baseURL: ``,
@@ -30,7 +25,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
   } = useSWR(`/api/user/${id}/orders`, fetcher);
 
   const { data, error, mutate, isLoading } = useSWR(`/api/user/${id}`, fetcher);
-  if (isLoading || ordersIsLoading) {
+  if (isLoading || ordersIsLoading || !data || !ordersData) {
     return (
       <div
         style={{
