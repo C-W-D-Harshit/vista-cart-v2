@@ -127,3 +127,16 @@ export const addressSchema = z.object({
 });
 
 export type addressSchema = z.infer<typeof addressSchema>;
+
+export const changePasswordSchema = z
+  .object({
+    currentPassword: z.string().nonempty("Current Password is required"),
+    newPassword: z.string().nonempty("New Password is required"),
+    confirmPassword: z.string().nonempty("Confirm Password is required"),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords must match",
+    path: ["confirmPassword"],
+  });
+
+export type changePasswordSchema = z.infer<typeof changePasswordSchema>;

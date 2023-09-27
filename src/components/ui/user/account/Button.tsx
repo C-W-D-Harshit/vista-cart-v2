@@ -9,7 +9,7 @@ const SubmitButton = ({ text }: { text: string }) => {
   const { pending } = experimental_useFormStatus();
   return (
     <Button type="submit" disabled={pending} size={"3"}>
-      {pending ? "Submitting..." : "Update"}
+      {pending ? "Submitting..." : text}
     </Button>
   );
 };
