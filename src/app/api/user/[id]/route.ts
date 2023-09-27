@@ -1,6 +1,5 @@
 import SessionChecker from "@/libs/session/SessionChecker";
 import User from "@/models/user";
-import { checkRateLimit } from "@/utils/ratelimit";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
@@ -21,7 +20,9 @@ export async function GET(
     if (!user)
       return NextResponse.json({ success: false, message: "User not found" });
     return NextResponse.json({ success: true, user });
-  } catch (error) {}
+  } catch (error) {
+    return NextResponse.json({ success: false, message: error });
+  }
 }
 
 export async function PATCH(
