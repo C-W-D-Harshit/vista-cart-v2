@@ -1,0 +1,83 @@
+@use "../colors";
+
+.accountLayout {
+  width: 100%;
+  display: flex;
+  gap: 3rem;
+
+  > * {
+    padding: 3rem;
+    height: 100%;
+    border-radius: 1rem;
+    box-shadow: inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.075),
+      /* shadow ring 👇 */ 0 0 0 1px hsla(0, 0%, 0%, 0.05),
+      /* multiple soft shadows 👇 */ 0 0.3px 0.4px hsla(0, 0%, 0%, 0.02),
+      0 0.9px 1.5px hsla(0, 0%, 0%, 0.045), 0 3.5px 6px hsla(0, 0%, 0%, 0.09);
+    background-color: #fff;
+  }
+  > :first-child {
+    width: 25%;
+  }
+  > :last-child {
+    width: 100%;
+  }
+  .accountSidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+
+    > * {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 1.8rem;
+      font-weight: 500;
+      > :first-child {
+        font-size: 2.2rem;
+      }
+    }
+  }
+}
+
+.account {
+  width: 100%;
+
+  .account_ {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    > * {
+      width: 50%;
+    }
+  }
+  .accountDetails_inp {
+    p {
+      font-size: 1.8rem;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+    input {
+      width: 100%;
+      padding: 1rem 1.5rem;
+      border: 1px solid colors.$gray-200;
+      background-color: colors.$gray-50;
+      border-radius: 1rem;
+      margin-bottom: 1.5rem;
+    }
+  }
+}
+
+.dark {
+  .accountLayout {
+    > * {
+      background-color: colors.$dark;
+    }
+  }
+  .accountDetails_inp {
+    input {
+      border: colors.$black-700 !important;
+      background-color: colors.$l-dark !important;
+    }
+  }
+}
