@@ -1,0 +1,88 @@
+@use "../colors";
+
+.customers {
+  width: 100%;
+  display: flex;
+  gap: 3rem;
+  > * {
+    padding: 3rem;
+    height: 100%;
+    border-radius: 1rem;
+    box-shadow: inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.075),
+      /* shadow ring 👇 */ 0 0 0 1px hsla(0, 0%, 0%, 0.05),
+      /* multiple soft shadows 👇 */ 0 0.3px 0.4px hsla(0, 0%, 0%, 0.02),
+      0 0.9px 1.5px hsla(0, 0%, 0%, 0.045), 0 3.5px 6px hsla(0, 0%, 0%, 0.09);
+    background-color: #fff;
+  }
+  > :first-child {
+    width: 30%;
+    > p {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 2rem;
+    }
+    > .customerInfoCard {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      > .customerInfoCard_img {
+        width: 8rem;
+        height: 8rem;
+        background-color: colors.$gray-50;
+        padding: 1rem;
+        border-radius: 1rem;
+        > :first-child {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+        }
+      }
+
+      > .customerInfoCard_ {
+        > p:first-child {
+          font-size: 1.8rem;
+          font-weight: 500;
+        }
+        > p {
+          font-size: 1.5rem;
+        }
+      }
+    }
+    > .customerInfo {
+      width: 100%;
+      margin: 3rem 0;
+      margin-bottom: 0;
+
+      > * {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 1.2rem 0;
+        > :first-child {
+          font-size: 1.7rem;
+          font-weight: 500;
+        }
+        > :last-child {
+          text-transform: capitalize;
+          text-align: right;
+        }
+      }
+    }
+  }
+  > :last-child {
+    width: 65%;
+  }
+}
+
+.dark {
+  .customers {
+    > * {
+      background-color: colors.$dark;
+    }
+  }
+  .customerInfoCard_img {
+    background-color: colors.$l-dark !important;
+  }
+}

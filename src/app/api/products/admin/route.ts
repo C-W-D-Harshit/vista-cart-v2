@@ -6,6 +6,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/options";
 import SessionChecker from "@/libs/session/SessionChecker";
 import QueryMaker from "@/libs/query/QueryMaker";
+import { checkRateLimit } from "@/utils/ratelimit";
 
 export async function POST(req: NextRequest) {
   // first take body
@@ -17,6 +18,15 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
+  // rate limit
+  try {
+    await checkRateLimit();
+  } catch (error) {
+    return NextResponse.json({
+      success: false,
+      message: "Too many requests",
+    });
+  }
   // check for admin
   const isAdminAuthorized = await SessionChecker({ role: "admin" });
 

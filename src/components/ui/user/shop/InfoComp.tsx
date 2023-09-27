@@ -57,7 +57,7 @@ const InfoComp = ({ data }: { data: any }) => {
     // });
     // console.log(session);
     if (session && session.user.verified) {
-      router.push(`/checkout?ref=buyNow&&product=${data.product.slug}`);
+      router.push(`/checkout?ref=buyNow&product=${data.product.slug}`);
     } else {
       toast.error("Please verify your email first!");
     }

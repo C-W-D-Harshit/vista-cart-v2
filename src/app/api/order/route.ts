@@ -84,9 +84,19 @@ export async function POST(req: NextRequest) {
         if (currentProduct) {
           currentProduct.stock -= orderProduct.quantity;
           await currentProduct.save();
+        } else {
+          return NextResponse.json({
+            success: false,
+            message: "Product not found",
+          });
         }
       })
     );
+
+    user.phoneNumber = order.address.phoneNumber;
+    user.address = order.address;
+
+    await user.save();
 
     // execute the order
     return NextResponse.json({

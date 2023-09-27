@@ -4,11 +4,21 @@ import Product from "@/models/product";
 import { Error } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 import catchAsyncErrors from "@/utils/catchAsyncErrors";
+import { checkRateLimit } from "@/utils/ratelimit";
 
 export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  // rate limit
+  try {
+    await checkRateLimit();
+  } catch (error) {
+    return NextResponse.json({
+      success: false,
+      message: "Too many requests",
+    });
+  }
   // check for admin
   const isAdminAuthorized = await SessionChecker({ role: "admin" });
 

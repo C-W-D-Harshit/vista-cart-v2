@@ -73,7 +73,7 @@ const Checkout = ({
           },
         ],
         address,
-        userID: session.user.id,
+        userID: session?.user.id,
         totalPrice: data.price + 40,
       };
       console.log(formData);
@@ -81,7 +81,7 @@ const Checkout = ({
       formData = {
         products: cartItems,
         address,
-        userID: session.user.id,
+        userID: session?.user.id,
         totalPrice: (cart?.cartTotalPrice as number) + 40,
       };
       console.log(formData);

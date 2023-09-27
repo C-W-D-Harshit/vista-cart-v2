@@ -8,7 +8,7 @@ async function getData({
   page: number;
 }) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_URL}/api/products?keyword=${searchQuery}&sort=${sort}&page=${page}`,
+    `${process.env.NEXT_PUBLIC_URL}/api/products?keyword=${searchQuery}&sort=${sort}&page=${page}&limit=16`,
     {
       next: { revalidate: 60 },
     }

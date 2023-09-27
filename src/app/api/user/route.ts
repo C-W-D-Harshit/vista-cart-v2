@@ -3,8 +3,16 @@ import { NextRequest, NextResponse } from "next/server";
 import ApiFeatures from "@/utils/apiFeatures";
 import QueryMaker from "@/libs/query/QueryMaker";
 import User from "@/models/user";
+import SessionChecker from "@/libs/session/SessionChecker";
+import { checkRateLimit } from "@/utils/ratelimit";
 
 export async function GET(req: NextRequest) {
+  // check for admin
+  const isAdminAuthorized = await SessionChecker({ role: "admin" });
+
+  if (isAdminAuthorized !== true) {
+    return isAdminAuthorized;
+  }
   // first connect DB
   await connectMongoDB();
 

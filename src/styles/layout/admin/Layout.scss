@@ -24,10 +24,33 @@
   }
 }
 
+.mobAdmin {
+  display: none;
+  flex-direction: column;
+  gap: 3rem;
+  height: 100dvh;
+  width: 100dvw;
+  h3 {
+    text-decoration: underline;
+  }
+}
+
 .dark {
   .adminLayoutProvider {
     > :last-child {
       background-color: #252527;
     }
+  }
+}
+
+@media (max-width: 768px) {
+  .adminLayoutProvider {
+    display: none;
+  }
+  .mobAdmin {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
   }
 }

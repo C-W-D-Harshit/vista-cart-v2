@@ -48,6 +48,13 @@ const userSchema = new Schema(
     passwordChangedAt: Number,
     passwordResetToken: String,
     passwordResetExpires: Date,
+    phoneNumber: Number,
+    address: {
+      address: String,
+      city: String,
+      state: String,
+      postalCode: Number,
+    },
   },
   {
     timestamps: true,

@@ -135,6 +135,11 @@ export const authOptions = {
       if (trigger === "update" && session?.verified) {
         token.verified = session.verified;
       }
+
+      if (trigger === "update" && session?.role) {
+        token.role = session.role;
+      }
+
       if (user) {
         // first connect db
         await connectMongoDB();
