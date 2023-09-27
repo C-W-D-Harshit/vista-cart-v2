@@ -139,7 +139,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
           </div>
           <div>
             <p>Total Orders</p>
-            <p>{ordersData.totalOrders > 0 ? ordersData.totalOrders : "-"}</p>
+            <p>{ordersData?.totalOrders > 0 ? ordersData?.totalOrders : "-"}</p>
           </div>
         </div>
       </div>
