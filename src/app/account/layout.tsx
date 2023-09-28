@@ -5,6 +5,7 @@ import { RiAccountPinBoxLine } from "react-icons/ri";
 import { MdOutlineSecurity } from "react-icons/md";
 import { Separator } from "@radix-ui/themes";
 import { BsCart4 } from "react-icons/bs";
+import { AiFillSetting } from "react-icons/ai";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -22,6 +23,10 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <Link href="/account/orders">
           <BsCart4 />
           <p>Orders</p>
+        </Link>
+        <Link href="/account/settings">
+          <AiFillSetting />
+          <p>Settings</p>
         </Link>
       </div>
       {children}

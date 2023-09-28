@@ -20,3 +20,19 @@ export async function getUserData() {
 
   return user;
 }
+
+export const handleRemove = async ({ id }: { id: string }) => {
+  ("use server");
+
+  // connect db
+  await connectMongoDB();
+
+  // find user
+  let user = await User.findById(id);
+
+  if (!user) throw new Error("User not found!");
+
+  user.active = false;
+
+  await user.save();
+};

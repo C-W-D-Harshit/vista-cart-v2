@@ -13,8 +13,6 @@ async function getData() {
   const session = await getServerSession(authOptions);
   const userID = session?.user.id;
 
-  console.log("userID", userID);
-
   // connect db
   await connectMongoDB();
 
