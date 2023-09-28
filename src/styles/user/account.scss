@@ -32,6 +32,7 @@
       gap: 1rem;
       font-size: 1.8rem;
       font-weight: 500;
+      min-width: max-content;
       > :first-child {
         font-size: 2.2rem;
       }
@@ -78,6 +79,33 @@
     input {
       border: colors.$black-700 !important;
       background-color: colors.$l-dark !important;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .accountLayout {
+    flex-direction: column;
+    > .accountSidebar {
+      flex-direction: row;
+      width: 100%;
+      overflow: hidden;
+      overflow-x: auto;
+      gap: 2rem;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* Internet Explorer and Edge */
+      > * {
+        padding: 1rem;
+        border: 1px solid colors.$gray-200;
+        border-radius: 0.5rem;
+      }
+      > :nth-child(3) {
+        display: none;
+      }
+    }
+
+    > .accountSidebar::-webkit-scrollbar {
+      display: none !important;
     }
   }
 }
