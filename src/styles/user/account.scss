@@ -69,6 +69,128 @@
   }
 }
 
+.account_orders {
+  width: 100%;
+  > * {
+    margin: 2rem 0;
+  }
+}
+
+.account_orders_top {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  > :first-child {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem;
+    background-color: colors.$gray-50;
+    border-radius: 1.5rem;
+    > * {
+      font-weight: 500;
+      color: colors.$gray-400;
+      padding: 0.7rem 1.5rem;
+
+      border-radius: 1rem;
+      transition: 0.2s ease-in-out;
+    }
+    > .active_ao {
+      color: #000;
+      background-color: #fff;
+      box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    }
+  }
+}
+
+.account_orders_content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  > .account_orders_content_item {
+    width: 100%;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.075),
+      /* shadow ring 👇 */ 0 0 0 1px hsla(0, 0%, 0%, 0.05),
+      /* multiple soft shadows 👇 */ 0 0.3px 0.4px hsla(0, 0%, 0%, 0.02),
+      0 0.9px 1.5px hsla(0, 0%, 0%, 0.045), 0 3.5px 6px hsla(0, 0%, 0%, 0.09);
+    > * {
+      padding: 1rem 3rem;
+    }
+    .account_orders_content_item_top {
+      background-color: colors.$gray-50;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      > :first-child {
+        display: flex;
+        align-items: center;
+        gap: 4rem;
+        > * {
+          > :first-child {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: colors.$black-500;
+          }
+          > :last-child {
+            font-weight: 600;
+          }
+        }
+      }
+      > :last-child {
+        > :last-child {
+          display: flex;
+          align-items: center;
+          gap: 1.5rem;
+          color: colors.$primary-500;
+          text-decoration: underline;
+          font-weight: 500;
+        }
+      }
+    }
+    .account_orders_content_item_product {
+      width: 100%;
+      > * {
+        margin: 1rem 0;
+        display: flex;
+        align-items: center;
+        gap: 3rem;
+        > :first-child {
+          width: 14rem;
+          height: 14rem;
+          padding: 1.5rem;
+          background-color: colors.$gray-50;
+          border-radius: 1rem;
+          > :first-child {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+          }
+        }
+        > :last-child {
+          > * {
+            margin: 1rem 0;
+          }
+          > p:first-child {
+            font-size: 2rem;
+            font-weight: 600;
+          }
+          > :last-child {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+          }
+        }
+      }
+    }
+  }
+}
+
 .dark {
   .accountLayout {
     > * {
@@ -79,6 +201,36 @@
     input {
       border: colors.$black-700 !important;
       background-color: colors.$l-dark !important;
+    }
+  }
+  .account_orders_top {
+    > :first-child {
+      background-color: colors.$l-dark !important;
+
+      .active_ao {
+        color: #fff;
+        background-color: colors.$dark;
+      }
+    }
+  }
+  .account_orders_content_item_top {
+    background-color: colors.$l-dark !important;
+    > :first-child {
+      > * {
+        > :first-child {
+          color: colors.$gray-200 !important;
+        }
+      }
+    }
+    > :last-child > :last-child {
+      color: colors.$primary-400 !important;
+    }
+  }
+  .account_orders_content_item_product {
+    > * {
+      > :first-child {
+        background-color: colors.$l-dark !important;
+      }
     }
   }
 }

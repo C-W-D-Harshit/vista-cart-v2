@@ -5,6 +5,7 @@ import Lottie from "react-lottie";
 import animationData from "@/animations/order-complete.json";
 import "@/styles/user/orderCompleted.scss";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const Page = ({
   searchParams: { orderId, paymentId },
@@ -31,7 +32,9 @@ const Page = ({
         />
       </div>
       <h1>Order Completed</h1>
-      <h2>Order ID: {orderId}</h2>
+      <Link href={`/account/orders/${orderId}`}>
+        <h2 style={{ textDecoration: "underline" }}>Order ID: {orderId}</h2>
+      </Link>
     </div>
   );
 };
