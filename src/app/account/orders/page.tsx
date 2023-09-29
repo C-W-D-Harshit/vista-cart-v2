@@ -8,7 +8,7 @@ import { Button, Separator } from "@radix-ui/themes";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { Suspense } from "react";
 
 async function getOrderProduct({ id }: { id: string }) {
   // connect db
@@ -116,97 +116,99 @@ const Page = async ({
       <Separator size={"4"} mb={"4"} mt={"4"} />
       <div className="account_orders">
         <Orders_top status={status ?? "completed"} />
-        <div className="account_orders_content">
-          {orders.length > 0 ? (
-            orders.map((order: any) => {
-              return (
-                <div key={order._id} className="account_orders_content_item">
-                  <div className="account_orders_content_item_top">
-                    <div>
+        <Suspense fallback={<Loader />}>
+          <div className="account_orders_content">
+            {orders.length > 0 ? (
+              orders.map((order: any) => {
+                return (
+                  <div key={order._id} className="account_orders_content_item">
+                    <div className="account_orders_content_item_top">
                       <div>
-                        <p>Order Placed</p>
-                        <p>{formatDateToLongFormat(order.createdAt)}</p>
-                      </div>
+                        <div>
+                          <p>Order Placed</p>
+                          <p>{formatDateToLongFormat(order.createdAt)}</p>
+                        </div>
 
-                      <div>
-                        <p>Total</p>
-                        <p>₹{order.totalPrice}</p>
+                        <div>
+                          <p>Total</p>
+                          <p>₹{order.totalPrice}</p>
+                        </div>
+                        <div>
+                          <p>Ship to</p>
+                          <p>{order.address.name}</p>
+                        </div>
                       </div>
                       <div>
-                        <p>Ship to</p>
-                        <p>{order.address.name}</p>
+                        <p>
+                          <strong>Order ID:</strong> {order._id.toString()}
+                        </p>
+                        <div>
+                          <Link href={`/account/orders/${order._id}`}>
+                            <p>View order details</p>
+                          </Link>
+                          <Separator orientation="vertical" color="blue" />
+                          <Link
+                            href={`/account/orders/${order._id}/invoice`}
+                            aria-disabled
+                          >
+                            <p>View invoice</p>
+                          </Link>
+                        </div>
                       </div>
                     </div>
-                    <div>
-                      <p>
-                        <strong>Order ID:</strong> {order._id.toString()}
-                      </p>
-                      <div>
-                        <Link href={`/account/orders/${order._id}`}>
-                          <p>View order details</p>
-                        </Link>
-                        <Separator orientation="vertical" color="blue" />
-                        <Link
-                          href={`/account/orders/${order._id}/invoice`}
-                          aria-disabled
-                        >
-                          <p>View invoice</p>
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                  {order.products.map((product: any, i: number) => {
-                    return (
-                      <>
-                        <div
-                          className="account_orders_content_item_product"
-                          key={product._id}
-                        >
-                          <div>
+                    {order.products.map((product: any, i: number) => {
+                      return (
+                        <>
+                          <div
+                            className="account_orders_content_item_product"
+                            key={product._id}
+                          >
                             <div>
-                              <Image
-                                src={
-                                  product.productDetails.images[0].url ||
-                                  "/de.png"
-                                }
-                                alt={product.productDetails.name}
-                                width={200}
-                                height={200}
-                              />
-                            </div>
-                            <div>
-                              <p>
-                                {product.productDetails.name}
-                                {product.quantity > 1 &&
-                                  ` (x ${product.quantity})`}
-                              </p>
-                              <p>Return till ...</p>
                               <div>
-                                <Link
-                                  href={`/shop/${product.productDetails.slug}`}
-                                >
-                                  <Button>Buy it again</Button>
-                                </Link>
-                                <Button variant="outline" disabled>
-                                  Track package
-                                </Button>
+                                <Image
+                                  src={
+                                    product.productDetails.images[0].url ||
+                                    "/de.png"
+                                  }
+                                  alt={product.productDetails.name}
+                                  width={200}
+                                  height={200}
+                                />
+                              </div>
+                              <div>
+                                <p>
+                                  {product.productDetails.name}
+                                  {product.quantity > 1 &&
+                                    ` (x ${product.quantity})`}
+                                </p>
+                                <p>Return till ...</p>
+                                <div>
+                                  <Link
+                                    href={`/shop/${product.productDetails.slug}`}
+                                  >
+                                    <Button>Buy it again</Button>
+                                  </Link>
+                                  <Button variant="outline" disabled>
+                                    Track package
+                                  </Button>
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                        {i !== order.products.length - 1 && (
-                          <Separator style={{ padding: "0" }} size={"4"} />
-                        )}
-                      </>
-                    );
-                  })}
-                </div>
-              );
-            })
-          ) : (
-            <h3>No Orders</h3>
-          )}
-        </div>
+                          {i !== order.products.length - 1 && (
+                            <Separator style={{ padding: "0" }} size={"4"} />
+                          )}
+                        </>
+                      );
+                    })}
+                  </div>
+                );
+              })
+            ) : (
+              <h3>No Orders</h3>
+            )}
+          </div>
+        </Suspense>
       </div>
     </div>
   );

@@ -75,6 +75,31 @@ class ApiFeatures {
     }
     return this;
   }
+  searchOrder() {
+    if (this.queryStr.keyword) {
+      let keyword = this.queryStr.keyword;
+
+      // Check if the keyword contains URL encoding, and if so, decode it
+      if (/%[0-9A-Fa-f]{2}/.test(keyword)) {
+        keyword = decodeURIComponent(keyword);
+      }
+
+      // Construct a case-insensitive regex pattern as a string
+      const keywordPattern = `.*${keyword}.*`;
+
+      // Define the keyword filter to use in the query
+      const keywordFilter = {
+        "address.name": {
+          $regex: keywordPattern,
+          $options: "i", // Case-insensitive search
+        },
+      };
+
+      // Update the query with the keyword filter
+      this.query = this.query.find(keywordFilter);
+    }
+    return this;
+  }
 }
 
 module.exports = ApiFeatures;

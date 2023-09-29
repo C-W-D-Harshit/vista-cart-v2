@@ -18,15 +18,6 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-  // rate limit
-  try {
-    await checkRateLimit();
-  } catch (error) {
-    return NextResponse.json({
-      success: false,
-      message: "Too many requests",
-    });
-  }
   // check for admin
   const isAdminAuthorized = await SessionChecker({ role: "admin" });
 

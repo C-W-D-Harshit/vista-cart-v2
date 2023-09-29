@@ -9,6 +9,9 @@ import { resend } from "../user/register/route";
 import User from "@/models/user";
 import { OrderCompletedEmailTemplate } from "@/components/templates/email/Order-Completed";
 import Product from "@/models/product";
+import connectMongoDB from "@/libs/mongo/dbConnect";
+import QueryMaker from "@/libs/query/QueryMaker";
+import ApiFeatures from "@/utils/apiFeatures";
 
 export async function POST(req: NextRequest) {
   // rate limit
@@ -34,6 +37,9 @@ export async function POST(req: NextRequest) {
     const body: any = await req.json();
     const response: any = addressSchema.parse(body.address);
     const { userID } = body;
+
+    // first connect DB
+    await connectMongoDB();
 
     // find user
     const user = await User.findById(userID);
@@ -109,4 +115,39 @@ export async function POST(req: NextRequest) {
       message: error.message,
     });
   }
+}
+
+export async function GET(req: NextRequest) {
+  // first check for session
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return NextResponse.json({
+      success: false,
+      message: "You are not authorized to perform this action!",
+    });
+  }
+
+  // first connect DB
+  await connectMongoDB();
+
+  // take query
+  const query = await QueryMaker(req);
+  // then do the rest simple work
+  const features = new ApiFeatures(Order.find(), query)
+    .filter()
+    .sort()
+    .paginate()
+    .searchOrder();
+  const rpp = process.env.RPP as any;
+  const orders = await features.query;
+  const totalOrder = await Order.find();
+  const totalOrders = totalOrder.length;
+  const totalPages = Math.ceil(totalOrders / (rpp || 8));
+  const numOfResults = orders.length;
+  // console.log(orders);
+  return NextResponse.json(
+    { success: true, orders, numOfResults, totalPages, totalOrders },
+    { status: 200 }
+  );
 }
