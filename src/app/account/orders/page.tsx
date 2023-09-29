@@ -175,7 +175,11 @@ const Page = async ({
                               />
                             </div>
                             <div>
-                              <p>{product.productDetails.name}</p>
+                              <p>
+                                {product.productDetails.name}
+                                {product.quantity > 1 &&
+                                  ` (x ${product.quantity})`}
+                              </p>
                               <p>Return till ...</p>
                               <div>
                                 <Link
