@@ -190,7 +190,7 @@ const Page = () => {
                     color={
                       product.status === "completed"
                         ? "green"
-                        : product.status === "pending"
+                        : product.status === "shipped"
                         ? "orange"
                         : "red"
                     }

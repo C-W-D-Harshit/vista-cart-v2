@@ -118,14 +118,11 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-  // first check for session
-  const session = await getServerSession(authOptions);
+  // check for admin
+  const isAdminAuthorized = await SessionChecker({ role: "admin" });
 
-  if (!session) {
-    return NextResponse.json({
-      success: false,
-      message: "You are not authorized to perform this action!",
-    });
+  if (isAdminAuthorized !== true) {
+    return isAdminAuthorized;
   }
 
   // first connect DB

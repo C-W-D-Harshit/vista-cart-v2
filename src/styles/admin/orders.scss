@@ -1,0 +1,78 @@
+@use "../colors";
+
+.adminOrder {
+  width: 100%;
+
+  .adminOrder_ {
+    width: 100%;
+    margin: 2rem 0;
+
+    > * {
+      width: 100%;
+      display: flex;
+      gap: 3rem;
+      margin-bottom: 3rem;
+
+      > * {
+        background-color: #fff;
+        box-shadow: inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.075),
+          /* shadow ring 👇 */ 0 0 0 1px hsla(0, 0%, 0%, 0.05),
+          /* multiple soft shadows 👇 */ 0 0.3px 0.4px hsla(0, 0%, 0%, 0.02),
+          0 0.9px 1.5px hsla(0, 0%, 0%, 0.045), 0 3.5px 6px hsla(0, 0%, 0%, 0);
+        padding: 3rem;
+        border-radius: 1rem;
+        height: 100%;
+      }
+      > :first-child {
+        width: 70%;
+      }
+
+      > :last-child {
+        width: 30%;
+      }
+    }
+  }
+}
+
+.adminOrder_info {
+  > p {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  > div {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    > * {
+      > p:first-child {
+        color: colors.$gray-400;
+        font-weight: 500;
+      }
+      > p:last-child {
+        font-weight: 500;
+        text-transform: capitalize;
+      }
+      > :last-child {
+        text-transform: capitalize;
+      }
+    }
+  }
+}
+
+.adminOrder_cus {
+  > p {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+}
+
+.dark {
+  .adminOrder_ {
+    > * > * {
+      background-color: colors.$dark !important;
+    }
+  }
+}
