@@ -38,6 +38,16 @@ export const generateMetadata = async ({
   const data = await getData(slug);
   return {
     title: data?.product?.name,
+    description: data?.product?.description,
+    openGraph: {
+      title: data?.product?.name,
+      images: [
+        {
+          url: data?.product?.images[0]?.url,
+        },
+      ],
+      description: data?.product?.description,
+    },
   };
 };
 
