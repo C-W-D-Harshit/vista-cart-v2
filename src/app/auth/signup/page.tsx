@@ -21,23 +21,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { signUpSchema } from "@/zod/schema";
 import SmallLoader from "@/components/essentials/SmallLoader";
-
-// const signUpSchema = z
-//   .object({
-//     email: z.string().email(),
-//     password: z.string().min(8, "Password should have atleast 8 characters"),
-//     name: z
-//       .string()
-//       .min(3, "Name should have atleast 3 characters")
-//       .max(50, "Name should have atmost 50 character"),
-//     confirmPassword: z.string(),
-//   })
-//   .refine((data) => data.password === data.confirmPassword, {
-//     message: "Passwords must match",
-//     path: ["confirmPassword"],
-//   });
-
-// type signUpSchema = z.infer<typeof signUpSchema>;
+import { Metadata } from "next";
 
 const Page = () => {
   const router = useRouter();

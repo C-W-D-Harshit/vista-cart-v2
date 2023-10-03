@@ -6,6 +6,7 @@ import { MdOutlineSecurity } from "react-icons/md";
 import { Separator } from "@radix-ui/themes";
 import { BsCart4 } from "react-icons/bs";
 import { AiFillSetting } from "react-icons/ai";
+import { Metadata } from "next";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -32,6 +33,10 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       {children}
     </div>
   );
+};
+
+export const metadata: Metadata = {
+  title: "Account",
 };
 
 export default Layout;

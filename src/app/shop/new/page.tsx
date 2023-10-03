@@ -1,5 +1,6 @@
 import ProductCard from "@/components/ui/user/cards/ProductCard";
 import "@/styles/user/shop.scss";
+import { Metadata } from "next";
 
 async function getData() {
   const res = await fetch(`${process.env.URL}/api/products?newArrival=true`, {
@@ -36,6 +37,10 @@ const Page = async ({
       </div>
     </div>
   );
+};
+
+export const metadata: Metadata = {
+  title: "New",
 };
 
 export default Page;
