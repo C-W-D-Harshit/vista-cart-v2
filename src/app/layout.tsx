@@ -13,6 +13,29 @@ export const metadata: Metadata = {
     template: "%s | Vista Cart",
   },
   description: "Developed by the one & only HARSHIT!",
+  metadataBase: new URL("https://vista-cart.cleverdevloper.in"),
+  alternates: {
+    canonical: "/",
+    languages: {
+      "en-US": "/en-US",
+    },
+  },
+  openGraph: {
+    title: {
+      default: "Vista Cart",
+      template: "%s | Vista Cart",
+    },
+    description: "Developed by the one & only HARSHIT!",
+    images: [
+      {
+        url: "https://vista-cart.cleverdevloper.in/og.png",
+      },
+    ],
+    url: "https://vista-cart.cleverdevloper.in/",
+    siteName: "Vista Cart",
+    locale: "en_US",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
