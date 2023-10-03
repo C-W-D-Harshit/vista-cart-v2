@@ -11,7 +11,7 @@ async function getData(slug: string) {
   // You can return Date, Map, Set, etc.
 
   if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
+    // This will activate the closest `error.js` Error Boundarys
     throw new Error("Failed to fetch data");
   }
 
