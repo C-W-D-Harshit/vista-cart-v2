@@ -8,7 +8,10 @@ import AuthSessionProvider from "@/providers/AuthSessionProvider";
 import { Analytics } from "@vercel/analytics/react";
 
 export const metadata: Metadata = {
-  title: "Vista Cart",
+  title: {
+    default: "Vista Cart",
+    template: "%s | Vista Cart",
+  },
   description: "Developed by the one & only HARSHIT!",
 };
 

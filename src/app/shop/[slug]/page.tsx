@@ -1,6 +1,7 @@
 import ImgCom from "@/components/ui/user/shop/ImgCom";
 import "@/styles/user/productdetails.scss";
 import InfoComp from "../../../components/ui/user/shop/InfoComp";
+import { Metadata } from "next";
 
 async function getData(slug: string) {
   const res = await fetch(`${process.env.URL}/api/products/${slug}`, {
@@ -27,6 +28,17 @@ const Page = async ({ params: { slug } }: { params: { slug: string } }) => {
       </div>
     </div>
   );
+};
+
+export const generateMetadata = async ({
+  params: { slug },
+}: {
+  params: { slug: string };
+}): Promise<Metadata> => {
+  const data = await getData(slug);
+  return {
+    title: data?.product?.name,
+  };
 };
 
 export default Page;
