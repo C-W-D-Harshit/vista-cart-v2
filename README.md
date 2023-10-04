@@ -45,7 +45,19 @@ Vista Cart is a full-stack e-commerce website built with Next.js, React, and Mon
 To run the full-stack e-commerce website locally, follow these steps:
 
 1. Clone the repository:
+
    ```bash
-   git clone https://github.com/yourusername/vista-cart.git
+   git clone https://github.com/C-W-D-Harshit/vista-cart-v2.git
    cd vista-cart
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   pnpm install
+   ```
+
+3. Start Development Server
+   ```bash
+   pnpm dev
    ```
