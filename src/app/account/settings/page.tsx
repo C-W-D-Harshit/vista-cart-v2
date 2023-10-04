@@ -1,7 +1,7 @@
 "use client";
 
 import { handleRemove } from "@/actions/account";
-import { Button, Select, Separator } from "@radix-ui/themes";
+import { AlertDialog, Button, Select, Separator, Flex } from "@radix-ui/themes";
 import { signOut, useSession } from "next-auth/react";
 import { useTheme } from "next-themes";
 import React from "react";
@@ -29,17 +29,40 @@ const Page = () => {
           </Select.Content>
         </Select.Root>
       </div>
-      <Button
-        color="red"
-        size={"3"}
-        onClick={() => {
-          handleRemove({ id: session?.user?.id });
-          signOut();
-          toast("Account Deleted");
-        }}
-      >
-        Delete Account
-      </Button>
+      <AlertDialog.Root>
+        <AlertDialog.Trigger>
+          <Button color="red" size={"3"}>
+            Delete Account
+          </Button>
+        </AlertDialog.Trigger>
+        <AlertDialog.Content style={{ maxWidth: 450 }}>
+          <AlertDialog.Title>Delete Account</AlertDialog.Title>
+          <AlertDialog.Description size="2">
+            Are you sure?
+          </AlertDialog.Description>
+
+          <Flex gap="3" mt="4" justify="end">
+            <AlertDialog.Cancel>
+              <Button variant="soft" color="gray">
+                Cancel
+              </Button>
+            </AlertDialog.Cancel>
+            <AlertDialog.Action>
+              <Button
+                variant="solid"
+                color="red"
+                onClick={() => {
+                  handleRemove({ id: session?.user?.id });
+                  signOut();
+                  toast("Account Deleted");
+                }}
+              >
+                Delete
+              </Button>
+            </AlertDialog.Action>
+          </Flex>
+        </AlertDialog.Content>
+      </AlertDialog.Root>
     </div>
   );
 };
