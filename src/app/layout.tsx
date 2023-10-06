@@ -47,7 +47,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body>
         <Toaster
-          toastOptions={{ style: { fontSize: "1.5rem" } }}
+          toastOptions={{ style: { fontSize: "1.4rem" } }}
           position="top-center"
           reverseOrder={false}
         />
