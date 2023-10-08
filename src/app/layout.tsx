@@ -36,6 +36,9 @@ export const metadata: Metadata = {
     locale: "en_US",
     type: "website",
   },
+  manifest: "/manifest.json",
+  icons: { apple: "/og.png" },
+  themeColor: "#fff",
 };
 
 export default function RootLayout({
